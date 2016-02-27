@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link href="style/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="style/player.css" rel="stylesheet" />
+        <title>UV5 Music Game - Player</title>
+    </head>
+
+    <body>
+        <div class="container" id="player">
+            <form class="form-signin">
+                <h2 class="form-signin-heading">UV5 Music Game</h2>
+                <label for="inputEmail" class="sr-only">Pseudo</label>
+                <input type="text" id="inputPseudo" class="form-control" placeholder="Pseudo" required autofocus>
+                <label for="inputStyle" class="sr-only">Genre</label>
+                <input type="text" id="inputStyle" class="form-control" placeholder="Style de musique">
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Rejoindre la partie</button>
+            </form>
+        </div>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+        <script>
+            var socket = io();
+            var pseudo;
+
+            function buzz() {
+                socket.emit("buzz");
+            }
+
+            $(".form-signin").submit(function () {
+
+                pseudo = $("#inputPseudo").val();
+                socket.emit("join", pseudo);
+
+                $("#player").html("<div class='form-signin'>" +
+                    "<h2 class='form-signin-heading'>Buzz pour répondre !</h2>" +
+                    "<img onclick='buzz()' src='./images/buzzer.png' />" +
+                    "</div>");
+                return false;
+            });
+        </script>
+    </body>
+</html>

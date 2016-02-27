@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link href="style/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="style/home.css" rel="stylesheet" />
+        <title>UV5 Music Game</title>
+    </head>
+
+    <body>
+		<div class="container">
+			<div class="jumbotron">
+				<h1>Music Puzzle</h1>
+				<p>Jeu de blind test entre amis !<p>
+			</div>
+
+			<div class="page-header">
+				<h1>Règles du jeu</h1>
+			</div>
+			<p>Le but du jeu est simple : trouver le plus rapidement le titre et l'artiste d'une série de chansons.</p>
+
+			<p>Pour cela, il vous faut :</p>
+			<ul>
+				<li>1 maître du jeu</li>
+				<li>2 ou + joueurs, ayant chacun un accès à Internet (smartphone ou ordinateur)</li>
+			</ul>
+			<p>Pour débuter la partie, les joueurs doivent se connecter au jeu à partir de leur terminal.
+			Chacun doit indiquer son nom et le style de musique qu'il préfère.
+			Cet outil servira de buzzer et permettra de savoir qui a été le plus rapide.</p>
+			<p>Lorsque l'un des joueurs a buzzé, il donne sa réponse au maître du jeu qui détermine si elle est correcte ou non.</p>
+			<p>Deux modes de jeu sont disponibles :</p>
+			<ul>
+				<li>choix aléatoire des titres</li>
+				<li>ou choix par le maître du jeu</li>
+			</ul>
+
+            <div class="page-header">
+				<h1>Joueurs connectés</h1>
+			</div>
+            <div id="players">
+                <p>Aucun joueur dans la partie.</p>
+            </div>
+
+			<div class="page-header">
+				<h1>Démarrer le jeu</h1>
+			</div>
+			<p>Lorsque vous êtes prêt, lancez-vous !</p>
+			<a href="/game" class="btn btn-lg btn-default">Commencer le jeu</a>
+		</div>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+        <script>
+            var socket = io();
+
+            function renderPlayers (data) {
+
+                var players;
+
+                if (data.length <= 0) players = "<p>Aucun joueur dans la partie.</p>";
+
+                else {
+                    players = data.reduce(function (res, player) {
+                        return res + "<li>" + player + "</li>";
+                    }, "");
+                    players = "<ul>" + players + "</ul>";
+                }
+                $("#players").html(players);
+            }
+
+            socket.on("connect", function () {
+
+                socket.on("join", function (data) {
+                    renderPlayers(data);
+                });
+
+                socket.on("left", function (data) {
+                    renderPlayers(data);
+                });
+            });
+        </script>
+	</body>
+</html>
