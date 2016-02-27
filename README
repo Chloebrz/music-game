@@ -12,6 +12,8 @@ This project uses a Node.js web application using Socket.io and a control point 
 Run the game
 ------------
 
+Install node.
+
 In the `WebApp` folder, run :
 
     npm install
