@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html class ="ui-mobile">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body >
+<div data-role="page"data-theme="a" class="type-home">
+
+		<div data-role="panel" id="mypanelLeft" data-position="left" data-display="overlay" data-position-fixed="true">
+			<a class="ui-btn" href="#" data-rel="close">close</a>
+			<h3>PlayList<h3>
+			<ul data-role="listview">
+				<li><a href="#">
+				<img src="images/pop.png">
+				<h2>Pop music name</h2>
+				<p>I love this music...</p></a></li>
+				
+				<li><a href="#">
+				<img src="images/jazz.jpg">
+				<h2>Jazz1 name</h2>
+				<p>I love this music...</p></a></li>
+				
+				<li><a href="#">
+				<img src="images/blues.jpg">
+				<h2>who I am</h2>
+				<p>Beatles</p></a></li>
+			</ul>
+		</div><!-- /panel -->
+		
+		<div data-role="panel" id="mypanelRight" data-position="right" data-display="overlay" data-position-fixed="true">
+			<a class="ui-btn" href="#" data-rel="close">close</a>
+			<h3>Players:<h3>
+			<ul data-role="listview">
+				<li><a>Alice<span class="ui-li-count">25</span></a></li>
+				<li><a>Bob<span class="ui-li-count">13</span></a></li>
+				<li><a>Charly<span class="ui-li-count">10</span></a></li>
+				</li>
+			</ul>
+			<h3>Music voted:<h3>
+			<ul data-role="listview">
+				<li><a data-icon="plus">Pop</a></li>
+				<li><a data-icon="plus">Jazz</a></li>
+				<li><a data-icon="plus">Blues</a></li>
+			</ul>
+		</div><!-- /panel -->
+		
+		
+	  <div data-role="header"  data-position="fixed">
+	  	<a href="#mypanelLeft" data-icon="bars">PlayList</a>
+		<h1>Music Puzzle</h1>
+		<a href="#mypanelRight" data-icon="bars">UserList</a>
+	  </div>
+
+	<div data-role="main" class="ui-content" >
+		<div class="bgimg">
+			<div class="textZone">
+				<h1>Dangerous<h1>		
+				<p>Here is a description...blablabla....</p>
+			</div>
+		</div>
+			
+	</div>
+	<div data-role="footer" class="ui-bar" data-position="fixed">
+	<button class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-play">play</button>
+	<button class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-next">next</button>
+	<button class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-volume">volume</button>
+	</div>
+</div> 
+
+
+
+
+
+<!-- header -->
+<!-- content -->
+<!-- footer -->
+
+
+</body>
+</html>
+
