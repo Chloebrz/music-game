@@ -1,0 +1,35 @@
+.ui-icon-play:after {
+    background-image: url("../images/master/Play.png");
+    /* Make your icon fit */
+    background-size: 18px 18px;
+}
+.ui-icon-next:after {
+    background-image: url("../images/master/forward.png");
+    /* Make your icon fit */
+    background-size: 18px 18px;
+}
+.ui-icon-volume:after {
+    background-image: url("../images/master/volume.png");
+    /* Make your icon fit */
+    background-size: 18px 18px;
+}
+
+.bgimg {
+	height:90vh;
+    background-image: url('../images/master/MJ.jpg');
+    background-size: 100%;
+}
+
+.textZone{
+	height:90vh;
+    background-color:rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
+dialog {
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    width: 300px;
+    padding: 0 50px 20px 50px;
+}
