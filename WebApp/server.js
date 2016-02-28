@@ -15,8 +15,8 @@ app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname + "/public/pages/index.html"));
 });
 
-app.get("/game", function (req, res) {
-    res.sendFile(path.join(__dirname + "/public/pages/game.html"));
+app.get("/master", function (req, res) {
+    res.sendFile(path.join(__dirname + "/public/pages/master.html"));
 });
 
 app.get("/player", function (req, res) {
