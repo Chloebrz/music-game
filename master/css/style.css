@@ -1,0 +1,27 @@
+.ui-icon-play:after {
+    background-image: url("../images/Play.png");
+    /* Make your icon fit */
+    background-size: 18px 18px;
+}
+.ui-icon-next:after {
+    background-image: url("../images/forward.png");
+    /* Make your icon fit */
+    background-size: 18px 18px;
+}
+.ui-icon-volume:after {
+    background-image: url("../images/volume.png");
+    /* Make your icon fit */
+    background-size: 18px 18px;
+}
+
+.bgimg {
+	height:90vh;
+    background-image: url('../images/MJ.jpg');
+    background-size: 100%;
+}
+
+.textZone{
+	height:90vh;
+    background-color:rgba(0, 0, 0, 0.5);
+    color: white;
+}
