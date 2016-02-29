@@ -8,6 +8,7 @@ var app = express();
 var server = require("http").createServer(app);
 var io = require("socket.io").listen(server);
 var path = require("path");
+var fs = require('fs');
 
 app.use(express.static(__dirname + "/public"));
 
@@ -40,6 +41,9 @@ io.sockets.on("connect", function (socket, pseudo, music_style) {
     socket.on("gameOn", function () {
         console.log("Game started");
         socket.emit("init", players);
+
+        var jsonObj = require("./test.json");
+        socket.emit("music", jsonObj);
     });
 
     socket.on("buzz", function () {

@@ -1,5 +1,79 @@
 {
-    "title" : "oh yeah",
-    "singer" : "cecile",
-    "description" : "Small Internet of thing project"
+  "head": {
+    "vars": [ "subject" , "artist" , "title" , "image" , "file" ]
+  } ,
+  "results": {
+    "bindings": [
+      {
+        "subject": { "type": "uri" , "value": "http://localhost:3030/blindtest/data-instances#moi_lolita" } ,
+        "artist": { "type": "literal" , "value": "Alizée" } ,
+        "title": { "type": "literal" , "value": "Moi Lolita" } ,
+        "image": { "type": "literal" , "value": "Images/" } ,
+        "file": { "type": "literal" , "value": "Songs/" }
+      } ,
+      {
+        "subject": { "type": "uri" , "value": "http://localhost:3030/blindtest/data-instances#wrecking_ball" } ,
+        "artist": { "type": "literal" , "value": "Miley Cyrus" } ,
+        "title": { "type": "literal" , "value": "Wrecking Ball" } ,
+        "image": { "type": "literal" , "value": "Images/" } ,
+        "file": { "type": "literal" , "value": "Songs/" }
+      } ,
+      {
+        "subject": { "type": "uri" , "value": "http://localhost:3030/blindtest/data-instances#le_sens_de_la_vie" } ,
+        "artist": { "type": "literal" , "value": "Tal" } ,
+        "title": { "type": "literal" , "value": "Le sens de la vie" } ,
+        "image": { "type": "literal" , "value": "Images/" } ,
+        "file": { "type": "literal" , "value": "Songs/" }
+      } ,
+      {
+        "subject": { "type": "uri" , "value": "http://localhost:3030/blindtest/data-instances#animals" } ,
+        "artist": { "type": "literal" , "value": "Maroon 5" } ,
+        "title": { "type": "literal" , "value": "Animals" } ,
+        "image": { "type": "literal" , "value": "Images/" } ,
+        "file": { "type": "literal" , "value": "Songs/" }
+      } ,
+      {
+        "subject": { "type": "uri" , "value": "http://localhost:3030/blindtest/data-instances#paradise" } ,
+        "artist": { "type": "literal" , "value": "ColdPlay" } ,
+        "title": { "type": "literal" , "value": "Paradise" } ,
+        "image": { "type": "literal" , "value": "Images/" } ,
+        "file": { "type": "literal" , "value": "Songs/" }
+      } ,
+      {
+        "subject": { "type": "uri" , "value": "http://localhost:3030/blindtest/data-instances#la_tribu_de_dana" } ,
+        "artist": { "type": "literal" , "value": "Manau" } ,
+        "title": { "type": "literal" , "value": "La Tribu de Dana" } ,
+        "image": { "type": "literal" , "value": "Images/" } ,
+        "file": { "type": "literal" , "value": "Songs/" }
+      } ,
+      {
+        "subject": { "type": "uri" , "value": "http://localhost:3030/blindtest/data-instances#envole_moi" } ,
+        "artist": { "type": "literal" , "value": "Jean-Jacques Goldman" } ,
+        "title": { "type": "literal" , "value": "Envole moi" } ,
+        "image": { "type": "literal" , "value": "Images/" } ,
+        "file": { "type": "literal" , "value": "Songs/" }
+      } ,
+      {
+        "subject": { "type": "uri" , "value": "http://localhost:3030/blindtest/data-instances#cheerleader" } ,
+        "artist": { "type": "literal" , "value": "OMI" } ,
+        "title": { "type": "literal" , "value": "Cheerleader" } ,
+        "image": { "type": "literal" , "value": "Images/" } ,
+        "file": { "type": "literal" , "value": "Songs/" }
+      } ,
+      {
+        "subject": { "type": "uri" , "value": "http://localhost:3030/blindtest/data-instances#sauvez_lamour" } ,
+        "artist": { "type": "literal" , "value": "Daniel Balavoine" } ,
+        "title": { "type": "literal" , "value": "Sauvez l'amour" } ,
+        "image": { "type": "literal" , "value": "Images/" } ,
+        "file": { "type": "literal" , "value": "Songs/" }
+      } ,
+      {
+        "subject": { "type": "uri" , "value": "http://localhost:3030/blindtest/data-instances#roar" } ,
+        "artist": { "type": "literal" , "value": "Katy Perry" } ,
+        "title": { "type": "literal" , "value": "Roar" } ,
+        "image": { "type": "literal" , "value": "Images/" } ,
+        "file": { "type": "literal" , "value": "Songs/" }
+      }
+    ]
+  }
 }
