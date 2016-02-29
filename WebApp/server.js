@@ -16,29 +16,30 @@ app.get("/", function (req, res) {
 });
 
 app.get("/master", function (req, res) {
-    res.sendFile(path.join(__dirname + "/public/pages/master.html"));
+    res.sendFile(path.join(__dirname + "/public/pages/master_pc.html"));
 });
 
 app.get("/player", function (req, res) {
     res.sendFile(path.join(__dirname + "/public/pages/player.html"));
 });
 
-// the usernames of the players who joined the game
-// TODO: add the music styles
+// the players who joined the game {name: Alice, style: pop, score:2}
 var players = [];
-
-
 
 io.sockets.on("connect", function (socket, pseudo, music_style) {
 
     socket.on("join", function (data) {
 
-        console.log("New player joined: " + data.pseudo);
+        console.log("New player joined: " + data.pseudo + " with music style: " + data.music_style);
         socket.pseudo = data.pseudo;
         socket.music_style = data.music_style;
-        players.push(data);
+        players.push({ pseudo : data.pseudo, music_style : data.music_style, score : 0 });
         socket.broadcast.emit("join", players);
-        console.log("Player " + socket.pseudo + socket.music_style);
+    });
+
+    socket.on("gameOn", function () {
+        console.log("Game started");
+        socket.emit("init", players);
     });
 
     socket.on("buzz", function () {
@@ -46,9 +47,23 @@ io.sockets.on("connect", function (socket, pseudo, music_style) {
         socket.broadcast.emit("buzz", socket.pseudo);
     });
 
+    socket.on("score", function (data) {
+        console.log("Player " + data + " scored!");
+
+        players = players.map(function (player) {
+            if (player.pseudo == data) player.score++;
+            return player;
+        });
+
+        socket.emit("update", players);
+    });
+
     socket.on("disconnect", function() {
-        players.splice(players.indexOf(socket.pseudo), 1);
-        socket.broadcast.emit("left", players);
+
+        players = players.filter(function (player) {
+            return player.pseudo != socket.pseudo;
+        });
+        socket.broadcast.emit("update", players);
     });
 });
 

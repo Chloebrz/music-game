@@ -4,7 +4,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
 	<link rel="stylesheet" type="text/css" href="../style/master.css">
-	<!-- <link href="style/bootstrap/css/bootstrap.min.css" rel="stylesheet" /> -->
 	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 </head>
@@ -53,13 +52,8 @@
 			</div>
       	</div>
       	<div class="ui-block-c" id="rightSecond">
-			<h3>Players:<h3>
-			<ul data-role="listview">
-				<li><a>Alice<span class="ui-li-count">25</span></a></li>
-				<li><a>Bob<span class="ui-li-count">13</span></a></li>
-				<li><a>Charly<span class="ui-li-count">10</span></a></li>
-				</li>
-			</ul>
+			<h3>Joueurs :<h3>
+			<ul id="players-score" class="ui-listview"></ul>
 			<h3>Music voted:<h3>
 			<ul data-role="listview">
 				<li><a data-icon="plus">Pop</a></li>
@@ -68,7 +62,7 @@
 			</ul>
       	</div>
 	</div>
-		
+
 	</div>
 </div>
 
@@ -90,7 +84,21 @@
 		});
 	});
 
+	function renderPlayersScores (data) {
+
+		var players = data.reduce(function (res, player) {
+			return res + "<li class='ui-li-player'>" + player.pseudo + "<span class='ui-li-count'>" + player.score + "</span></li>";
+		}, "");
+		$("#players-score").html(players);
+	}
+
 	socket.on("connect", function () {
+
+		socket.emit("gameOn");
+
+		socket.on("init", function (data) {
+			renderPlayersScores(data);
+		});
 
 		socket.on("buzz", function (data) {
 
@@ -99,12 +107,17 @@
 			var dialog = document.getElementById("dialog");
 			dialog.showModal();
 
-			document.getElementById("no").onclick = function() {
+			document.getElementById("no").onclick = function () {
 				dialog.close();
 			};
-			document.getElementById("yes").onclick = function() {
+			document.getElementById("yes").onclick = function () {
+				socket.emit("score", data);
 				dialog.close();
 			};
+		});
+
+		socket.on("update", function (data) {
+			renderPlayersScores(data);
 		});
 	});
 </script>

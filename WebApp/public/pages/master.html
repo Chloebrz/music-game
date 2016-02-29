@@ -35,18 +35,13 @@
 		<div data-role="panel" id="mypanelRight" data-position="right" data-display="overlay" data-position-fixed="true">
 			<a class="ui-btn" href="#" data-rel="close">close</a>
 			<h3>Players:<h3>
-			<ul data-role="listview">
-				<li><a>Alice<span class="ui-li-count">25</span></a></li>
-				<li><a>Bob<span class="ui-li-count">13</span></a></li>
-				<li><a>Charly<span class="ui-li-count">10</span></a></li>
-				</li>
-			</ul>
-			<h3>Music voted:<h3>
+			<ul id="players-score" data-role="listview"></ul>
+			<!-- <h3>Music voted:<h3>
 			<ul data-role="listview">
 				<li><a data-icon="plus">Pop</a></li>
 				<li><a data-icon="plus">Jazz</a></li>
 				<li><a data-icon="plus">Blues</a></li>
-			</ul>
+			</ul> -->
 		</div><!-- /panel -->
 
 
@@ -92,7 +87,23 @@
 		});
 	});
 
+	function renderPlayersScores (data) {
+
+		var players = data.reduce(function (res, player) {
+			return res + "<li><a>" + player.pseudo + "<span class='ui-li-count'>" + player.score + "</span></a></li>";
+		}, "");
+		$("#players-score").html(players);
+	}
+
 	socket.on("connect", function () {
+
+		socket.emit("gameOn");
+
+		socket.on("init", function (data) {
+
+			console.log("INIT", data);
+			renderPlayersScores(data);
+		});
 
 		socket.on("buzz", function (data) {
 
