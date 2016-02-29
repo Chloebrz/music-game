@@ -23,9 +23,14 @@
 
 .textZone{
 	height:80vh;
-    background-color:rgba(0, 0, 0, 0.7);
+    background-color:rgba(0, 0, 0, 0.5);
     color: white;
-    padding: 5px;
+    padding: 10px 25px;
+    text-align: justify;
+}
+
+.control {
+    text-align: center;
 }
 
 #mainColumn {
@@ -42,6 +47,12 @@
     width: 20%;
     margin-left: 3%;
     margin-right: 2%;
+}
+
+#players-score {
+    border-width: 0 0 1px;
+    border-style: solid;
+    border-color: #ddd;
 }
 
 .ui-li-player {

@@ -3,13 +3,10 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="../style/master.css">
 	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-
-
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-
 </head>
 <body >
 <div data-role="page" data-theme="a" class="type-home">
@@ -38,10 +35,20 @@
 				<img src="../images/master/blues.jpg">
 				<h2>who I am</h2>
 				<p>Beatles</p></a></li>
+
+				<li><a href="#">
+				<img src="../images/master/MJ.jpg">
+				<h2>Jazz2 name</h2>
+				<p>I love this music...</p></a></li>
+
+				<li><a href="#">
+				<img src="../images/master/blues.jpg">
+				<h2>Another song</h2>
+				<p>Beatles</p></a></li>
 			</ul>
       	</div>
       	<div class="ui-block-b" id="mainColumn">
-      		<div data-role="controlgroup" data-type="horizontal">
+      		<div class="control" data-role="controlgroup" data-type="horizontal">
 				<a class="ui-btn ui-btn-icon-left ui-icon-play">play</a>
 				<a class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-next">next</a>
 				<a class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-volume">volume</a>
@@ -56,13 +63,20 @@
 			</div>
       	</div>
       	<div class="ui-block-c" id="rightSecond">
-			<h3>Joueurs :<h3>
+			<h3>Joueurs<h3>
 			<ul id="players-score" class="ui-listview"></ul>
-			<h3>Music voted:<h3>
+
+			<h3>Titres recommandés<h3>
 			<ul data-role="listview">
-				<li><a data-icon="plus">Pop</a></li>
-				<li><a data-icon="plus">Jazz</a></li>
-				<li><a data-icon="plus">Blues</a></li>
+				<li><a href="#">
+				<img src="../images/master/blues.jpg">
+				<h2>who I am</h2>
+				<p>Beatles</p></a></li>
+
+				<li><a href="#">
+				<img src="../images/master/pop.png">
+				<h2>Pop music name</h2>
+				<p>I love this music...</p></a></li>
 			</ul>
       	</div>
 	</div>
@@ -70,7 +84,7 @@
 	</div>
 </div>
 
-<div id="dialog-confirm" title="Quelqu'un a buzzé !">
+<div id="dialog-confirm" title="Buzz">
 	<h3><span id="name">XX</span> a buzzé !</h3>
     <p>Est-ce la bonne réponse ?</p>
 </div>
