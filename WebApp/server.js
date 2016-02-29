@@ -27,14 +27,18 @@ app.get("/player", function (req, res) {
 // TODO: add the music styles
 var players = [];
 
-io.sockets.on("connect", function (socket, pseudo) {
 
-    socket.on("join", function (pseudo) {
 
-        console.log("New player joined: " + pseudo);
-        socket.pseudo = pseudo;
-        players.push(pseudo);
+io.sockets.on("connect", function (socket, pseudo, music_style) {
+
+    socket.on("join", function (data) {
+
+        console.log("New player joined: " + data.pseudo);
+        socket.pseudo = data.pseudo;
+        socket.music_style = data.music_style;
+        players.push(data);
         socket.broadcast.emit("join", players);
+        console.log("Player " + socket.pseudo + socket.music_style);
     });
 
     socket.on("buzz", function () {
