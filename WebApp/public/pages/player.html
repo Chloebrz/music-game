@@ -25,7 +25,7 @@
         <script>
             var socket = io();
             var pseudo;
-
+            var music_style;
             function buzz() {
                 socket.emit("buzz");
             }
@@ -33,7 +33,8 @@
             $(".form-signin").submit(function () {
 
                 pseudo = $("#inputPseudo").val();
-                socket.emit("join", pseudo);
+                music_style = $("#inputStyle").val();
+                socket.emit("join", {pseudo: pseudo, music_style:music_style});
 
                 $("#player").html("<div class='form-signin'>" +
                     "<h2 class='form-signin-heading'>Buzz pour répondre !</h2>" +

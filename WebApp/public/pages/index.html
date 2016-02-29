@@ -62,7 +62,7 @@
 
                 else {
                     players = data.reduce(function (res, player) {
-                        return res + "<li>" + player + "</li>";
+                        return res + "<li>" + player.pseudo + "</li>";
                     }, "");
                     players = "<ul>" + players + "</ul>";
                 }
