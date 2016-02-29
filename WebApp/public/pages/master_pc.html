@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html class ="ui-mobile">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" type="text/css" href="../style/master.css">
+	<!-- <link href="style/bootstrap/css/bootstrap.min.css" rel="stylesheet" /> -->
+	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body >
+<div data-role="page" data-theme="a" class="type-home">
+
+	  <div data-role="header"  data-position="fixed">
+		<h1>Music Puzzle</h1>
+	  </div>
+
+	<div data-role="main" >
+
+	<div class="ui-grid-b">
+		<div class="ui-block-a" id="leftSecond">
+	      	<h3>PlayList<h3>
+			<ul data-role="listview">
+				<li><a href="#">
+				<img src="../images/master/pop.png">
+				<h2>Pop music name</h2>
+				<p>I love this music...</p></a></li>
+
+				<li><a href="#">
+				<img src="../images/master/jazz.jpg">
+				<h2>Jazz1 name</h2>
+				<p>I love this music...</p></a></li>
+
+				<li><a href="#">
+				<img src="../images/master/blues.jpg">
+				<h2>who I am</h2>
+				<p>Beatles</p></a></li>
+			</ul>
+      	</div>
+      	<div class="ui-block-b" id="mainColumn">
+      		<div data-role="controlgroup" data-type="horizontal">
+				<a class="ui-btn ui-btn-icon-left ui-icon-play">play</a>
+				<a class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-next">next</a>
+				<a class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-volume">volume</a>
+				<a id="lampe" class="btn btn-danger ui-btn ui-corner-all ui-btn-icon-left ui-icon-volume">Allumer la lampe</a>
+      		</div>
+			<div class="bgimg">
+				<div class="textZone">
+					<h1>Dangerous</h1>
+					<h3>Michael Joseph Jackson</h3>
+					<p>Dangerous is the eighth studio album by American recording artist Michael Jackson. It is his fourth studio album released through Epic Records. It was released on November 26, 1991. His first album under his new contract with Sony Music, it was also Jackson's first album since 1975's Forever, Michael not to be produced by longtime collaborator Quincy Jones, who had agreed to split after the final recording sessions for Jackson's 1987 album, Bad. Dangerous has sold 32 million copies worldwide, 7 million albums were shipped in the United States alone, and has been cited as one of the best-selling albums of all time. The album produced four top ten singles on the Billboard Hot 100 including one number-one. Similar to the musician's previous material, the album's music features elements of R&B, pop and rock while also incorporating a newer genre, new jack swing, after the inclusion of producer Teddy Riley to the project in a bid to present Jackson to a younger urban audience.</p>
+				</div>
+			</div>
+      	</div>
+      	<div class="ui-block-c" id="rightSecond">
+			<h3>Players:<h3>
+			<ul data-role="listview">
+				<li><a>Alice<span class="ui-li-count">25</span></a></li>
+				<li><a>Bob<span class="ui-li-count">13</span></a></li>
+				<li><a>Charly<span class="ui-li-count">10</span></a></li>
+				</li>
+			</ul>
+			<h3>Music voted:<h3>
+			<ul data-role="listview">
+				<li><a data-icon="plus">Pop</a></li>
+				<li><a data-icon="plus">Jazz</a></li>
+				<li><a data-icon="plus">Blues</a></li>
+			</ul>
+      	</div>
+	</div>
+		
+	</div>
+</div>
+
+<dialog id="dialog">
+	<h3><span id="name">XX</span> a buzzé !</h3>
+	<p>Est-ce la bonne réponse ?</p>
+	<button id="yes" class="btn btn-primary" value="oui">Oui</button>
+	<button id="no" class="btn btn-default" value="non">Non</button>
+</dialog>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+	var socket = io();
+
+	$("#lampe").click(function () {
+		$.get("http://localhost:8000/test", function (data, status) {
+			console.log(data, status);
+		});
+	});
+
+	socket.on("connect", function () {
+
+		socket.on("buzz", function (data) {
+
+			$("#name").html(data);
+
+			var dialog = document.getElementById("dialog");
+			dialog.showModal();
+
+			document.getElementById("no").onclick = function() {
+				dialog.close();
+			};
+			document.getElementById("yes").onclick = function() {
+				dialog.close();
+			};
+		});
+	});
+</script>
+
+</body>
+</html>

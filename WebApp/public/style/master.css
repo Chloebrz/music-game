@@ -14,16 +14,18 @@
     background-size: 18px 18px;
 }
 
+
 .bgimg {
-	height:90vh;
-    background-image: url('../images/master/MJ.jpg');
+	height:80vh;
+    background-image: url("../images/master/MJ.jpg");
     background-size: 100%;
 }
 
 .textZone{
-	height:90vh;
-    background-color:rgba(0, 0, 0, 0.5);
+	height:80vh;
+    background-color:rgba(0, 0, 0, 0.7);
     color: white;
+    padding: 5px;
 }
 
 dialog {
@@ -32,4 +34,20 @@ dialog {
     box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
     width: 300px;
     padding: 0 50px 20px 50px;
+}
+
+#mainColumn {
+    width: 50%;
+}
+
+#leftSecond {
+    width: 20%;
+    margin-left: 2%;
+    margin-right: 3%;
+}
+
+#rightSecond {
+    width: 20%;
+    margin-left: 3%;
+    margin-right: 2%;
 }
