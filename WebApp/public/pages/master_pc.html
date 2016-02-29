@@ -6,6 +6,9 @@
 	<link rel="stylesheet" type="text/css" href="../style/master.css">
 	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+
+	
 </head>
 <body >
 <div data-role="page" data-theme="a" class="type-home">
@@ -19,7 +22,7 @@
 	<div class="ui-grid-b">
 		<div class="ui-block-a" id="leftSecond">
 	      	<h3>PlayList<h3>
-			<ul data-role="listview">
+			<ul data-role="listview" id="sortable">
 				<li><a href="#">
 				<img src="../images/master/pop.png">
 				<h2>Pop music name</h2>
@@ -75,8 +78,14 @@
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script>
 	var socket = io();
+
+	$(function() {
+		$("#sortable").sortable();
+		// $("#sortable").disableSelection();
+	});
 
 	$("#lampe").click(function () {
 		$.get("http://localhost:8000/test", function (data, status) {
