@@ -15,7 +15,8 @@
                 <label for="inputEmail" class="sr-only">Pseudo</label>
                 <input type="text" id="inputPseudo" class="form-control" placeholder="Pseudo" required autofocus>
                 <label for="inputStyle" class="sr-only">Genre</label>
-                <input type="text" id="inputStyle" class="form-control" placeholder="Style de musique">
+                <select id="inputStyle" class="form-control" style="height:35px;margin-top:10px;">
+                </select>
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Rejoindre la partie</button>
             </form>
         </div>
@@ -29,6 +30,22 @@
             function buzz() {
                 socket.emit("buzz");
             }
+
+            $(function() {
+          		var query_all = "PREFIX blindtest:   <http://localhost:3030/blindtest/data#> " +
+                                  "SELECT DISTINCT ?category " +
+                                  "WHERE {" +
+                                    "SERVICE <http://localhost:3030/blindtest/sparql> {" +
+                                    "?subject blindtest:hasCategory ?category" +
+                                  "}}";
+
+          		$.post("http://localhost:3030/blindtest/query", {query: query_all}, function (data, status) {
+                var categories = data.results.bindings.reduce(function (res, object) {
+            			return res + "<option val='"+ object.category.value +"'>" + object.category.value+"</option>";
+            		}, "");
+                $("#inputStyle").html("<option value='' disabled selected hidden>Style de music</option>" + categories);
+          		});
+          	});
 
             $(".form-signin").submit(function () {
 
