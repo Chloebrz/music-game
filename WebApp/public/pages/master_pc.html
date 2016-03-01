@@ -3,10 +3,14 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="../style/master.css">
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+	<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 </head>
 <body >
 <div data-role="page" data-theme="a" class="type-home">
@@ -20,40 +24,14 @@
 	<div class="ui-grid-b">
 		<div class="ui-block-a" id="leftSecond">
 	      	<h3>PlayList<h3>
-			<ul data-role="listview" id="sortable">
-				<li><a href="#">
-				<img src="../images/master/pop.png">
-				<h2>Pop music name</h2>
-				<p>I love this music...</p></a></li>
-
-				<li><a href="#">
-				<img src="../images/master/jazz.jpg">
-				<h2>Jazz1 name</h2>
-				<p>I love this music...</p></a></li>
-
-				<li><a href="#">
-				<img src="../images/master/blues.jpg">
-				<h2>who I am</h2>
-				<p>Beatles</p></a></li>
-
-				<li><a href="#">
-				<img src="../images/master/MJ.jpg">
-				<h2>Jazz2 name</h2>
-				<p>I love this music...</p></a></li>
-
-				<li><a href="#">
-				<img src="../images/master/blues.jpg">
-				<h2>Another song</h2>
-				<p>Beatles</p></a></li>
-			</ul>
+			<ul data-role="listview" id="sortable"></ul>
       	</div>
       	<div class="ui-block-b" id="mainColumn">
       		<div class="control" data-role="controlgroup" data-type="horizontal">
 				<a class="ui-btn ui-btn-icon-left ui-icon-play">play</a>
-				<a class="ui-btn ui-btn-icon-left ui-icon-pause">pause</a>
-				<a class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-next">next</a><br/>
-				
-				<input id="volume" type="range" name="slider-1" id="slider-1" value="60" min="0" max="100" data-mini = "true" data-highlight="true">
+				<a class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-next">next</a>
+				<a class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-volume">volume</a>
+				<a id="lampe" class="btn btn-danger ui-btn ui-corner-all ui-btn-icon-left ui-icon-volume">Allumer la lampe</a>
       		</div>
 			<div class="bgimg">
 				<div class="textZone">
@@ -90,9 +68,6 @@
     <p>Est-ce la bonne réponse ?</p>
 </div>
 
-<script src="/socket.io/socket.io.js"></script>
-<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script>
 	var socket = io();
 
@@ -101,6 +76,7 @@
 	});
 
 	$("#lampe").click(function () {
+
 		$.get("http://localhost:8000/audio/on", function (data, status) {
 			console.log(data, status);
 		});
@@ -112,6 +88,14 @@
 			return res + "<li class='ui-li-player'>" + player.pseudo + "<span class='ui-li-count'>" + player.score + "</span></li>";
 		}, "");
 		$("#players-score").html(players);
+	}
+
+	function renderPlayList (data) {
+
+		var musics = data.results.bindings.reduce(function (res, music) {
+			return res + "<li><a href='#'><img src='" + music.image.value + "'><h2>" + music.title.value + "</h2><p>" + music.artist.value + "</p></a></li>";
+		}, "");
+		$("#sortable").html(musics).listview("refresh");
 	}
 
 	socket.on("connect", function () {
@@ -144,6 +128,10 @@
 
 		socket.on("update", function (data) {
 			renderPlayersScores(data);
+		});
+
+		socket.on("music", function (data) {
+			renderPlayList(data);
 		});
 	});
 </script>
