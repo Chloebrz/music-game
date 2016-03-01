@@ -34,13 +34,7 @@
 
 				<input id="volume" type="range" name="slider-1" id="slider-1" value="60" min="0" max="100" data-mini = "true" data-highlight="true">
       		</div>
-			<div class="bgimg">
-				<div class="textZone">
-					<h1>Dangerous</h1>
-					<h3>Michael Joseph Jackson</h3>
-					<p>Dangerous is the eighth studio album by American recording artist Michael Jackson. It is his fourth studio album released through Epic Records. It was released on November 26, 1991. His first album under his new contract with Sony Music, it was also Jackson's first album since 1975's Forever, Michael not to be produced by longtime collaborator Quincy Jones, who had agreed to split after the final recording sessions for Jackson's 1987 album, Bad. Dangerous has sold 32 million copies worldwide, 7 million albums were shipped in the United States alone, and has been cited as one of the best-selling albums of all time. The album produced four top ten singles on the Billboard Hot 100 including one number-one. Similar to the musician's previous material, the album's music features elements of R&B, pop and rock while also incorporating a newer genre, new jack swing, after the inclusion of producer Teddy Riley to the project in a bid to present Jackson to a younger urban audience.</p>
-				</div>
-			</div>
+			<div id="content" class="textZone"></div>
       	</div>
       	<div class="ui-block-c" id="rightSecond">
 			<h3>Joueurs<h3>
@@ -70,8 +64,8 @@
 	var socket = io();
 
 	$(function() {
+
 		$("#sortable").sortable();
-      
 
 		var query_all = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>" +
 			"PREFIX blindtest:   <http://localhost:3030/blindtest/data#> " +
@@ -91,32 +85,28 @@
 			renderPlayList(data);
 		});
 	});
-   
-   function render_recommandation (categories)  {
 
-      var query_recommandation = 'PREFIX blindtest:   <http://localhost:3030/blindtest/data#> ' +
+	function renderRecommandations (categories)  {
 
-                                 'SELECT * WHERE { ' +
-     
-                                 'SERVICE <http://localhost:3030/blindtest/sparql> {';
-      var compteur = 0;
-      categories.forEach(function(category) {
-         if (compteur!=0){
-            query_recommandation += 'UNION ' ;
-         }
-         compteur ++;
-         query_recommandation += '{' +    
+		var query_recommandation = "PREFIX blindtest:   <http://localhost:3030/blindtest/data#> " +
+		                         "SELECT * WHERE { " +
+		                         "SERVICE <http://localhost:3030/blindtest/sparql> {";
+		var compteur = 0;
+		categories.forEach(function(category) {
 
-           '?subject blindtest:hasCategory ?category .' +
-           '?subject blindtest:hasArtist ?artist_blindtest.' +
-           '?subject blindtest:hasName ?title.' +
-           '?subject blindtest:hasImage ?image.' +
-           '?subject blindtest:hasFile ?file .' +
-           'FILTER regex(?category,"' + category + '")}';
-           
-      });
+		 if (compteur!=0) query_recommandation += "UNION " ;
+		 compteur ++;
 
-      query_recommandation += '}}'  ;
+		 query_recommandation += "{" +
+		   "?subject blindtest:hasCategory ?category ." +
+		   "?subject blindtest:hasArtist ?artist_blindtest." +
+		   "?subject blindtest:hasName ?title." +
+		   "?subject blindtest:hasImage ?image." +
+		   "?subject blindtest:hasFile ?file ." +
+		   "FILTER regex(?category,'" + category + "')}";
+		});
+
+	  	query_recommandation += "}}"  ;
 
 		$.post("http://localhost:3030/blindtest/query", {query: query_recommandation}, function (data, status) {
 			renderRecommandation(data);
@@ -124,8 +114,63 @@
 	}
 
 	function playMusic() {
+
 		var url = $("ul#sortable li:first").attr("url");
 		$.get("http://localhost:8000/audio/playMusic?musicurl=" + url, function (data, status) {
+			console.log(data, status);
+		});
+
+		console.log("PLAY MUSIC");
+
+		var title = $("ul#sortable li:first > a > h2").text();
+		var artist = $("ul#sortable li:first > a > p").text();
+		var image = $("ul#sortable li:first > a > img").attr("src");
+
+		var query = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>" +
+			"PREFIX blindtest:   <http://localhost:3030/blindtest/data#> " +
+			"PREFIX rdfs:       <http://www.w3.org/2000/01/rdf-schema#>" +
+			"PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>" +
+			"PREFIX dbp:        <http://dbpedia.org/property/>" +
+			"PREFIX prop-fr:        <http://fr.dbpedia.org/property/>" +
+			"PREFIX foaf: <http://xmlns.com/foaf/0.1/>" +
+			"SELECT * WHERE { " +
+				"SERVICE <http://dbpedia.org/sparql> {" +
+				"?sub  dbpedia-owl:abstract   ?description ." +
+				"?sub     dbpedia-owl:genre    ?genre ." +
+				"?sub  rdfs:comment              ?comment ." +
+				"?sub dbp:title               ?test ." +
+				"?sub     dbp:artist              ?artist ." +
+				"?artist rdfs:label              ?artist_label." +
+				"?artist dbpedia-owl:abstract  ?artiste_abstract ." +
+				"OPTIONAL {?sub   dbpedia-owl:genre       ?genre }." +
+				"OPTIONAL {?sub   dbpedia-owl:album       ?album } ." +
+				"OPTIONAL { ?sub  dbp:released            ?date }." +
+				"OPTIONAL {?sub   dbp:thisAlbum           ?album} " +
+
+				"{FILTER LANGMATCHES(LANG(?description), 'fr' )" +
+				"   FILTER LANGMATCHES(LANG(?comment), 'fr')" +
+				"   FILTER LANGMATCHES(LANG(?artiste_abstract), 'fr' )}" +
+				"UNION" +
+				"{FILTER LANGMATCHES(LANG(?description), 'en' )"+
+				"FILTER LANGMATCHES(LANG(?comment), 'en' )"+
+				" FILTER LANGMATCHES(LANG(?artiste_abstract), 'en' )}"+
+
+				" FILTER regex(?test,'" + title + "')"+
+				"FILTER regex(?artist_label,'" + artist + "')}}";
+
+		$.post("http://localhost:3030/blindtest/query", {query: query}, function (data, status) {
+
+			var desc = data.results.bindings[0];
+
+			var description = "<h1>" + title + "</h1>" +
+				"<h3>" + desc.artist_label.value + "</h3>" +
+				"<p><strong>Album : </strong>" + desc.album.value + "</p>" +
+				"<p><strong>Date de sortie : </strong>" + desc.date.value + "</p>" +
+				"<p><strong>Genre : </strong>" + desc.genre.value + "</p>" +
+				"<p>" + desc.description.value + "</p>" +
+				"<img src=" + image + " />";
+
+			$("#content").html(description);
 		});
 	}
 
@@ -168,25 +213,26 @@
 		}, "");
 		$("#sortable").html(musics).listview("refresh");
 	}
-   
+
    function renderRecommandation (data) {
+
       var musics = data.results.bindings.reduce(function (res, music) {
 			return res + "<li url=" + music.file.value + "><a href='#'><img src='" + music.image.value + "'><h2>" + music.title.value + "</h2><p>" + music.artist_blindtest.value + "</p></a></li>";
 		}, "");
       $("#recommandation").html(musics).listview("refresh");
-		
 	}
-   
 
 	socket.on("connect", function () {
 
 		socket.emit("gameOn");
 
 		socket.on("init", function (data) {
+
 			renderPlayersScores(data);
-         var categories = data.map(function (player) {
-			return player.music_style;});
-         render_recommandation (categories);
+         	var categories = data.map(function (player) {
+				return player.music_style;
+			});
+         	renderRecommandations(categories);
 		});
 
 		socket.on("buzz", function (data) {

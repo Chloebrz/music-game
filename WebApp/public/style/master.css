@@ -15,18 +15,13 @@
 }
 
 
-.bgimg {
-	height:80vh;
-    background-image: url("../images/master/MJ.jpg");
-    background-size: 100%;
-}
-
 .textZone{
-	height:80vh;
-    background-color:rgba(0, 0, 0, 0.5);
-    color: white;
     padding: 10px 25px;
     text-align: justify;
+}
+
+img {
+    width: 100%;
 }
 
 .control {
