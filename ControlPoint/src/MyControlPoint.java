@@ -104,7 +104,6 @@ public class MyControlPoint extends ControlPoint implements
 
 		Action action = audioDevice.getAction("ExecuteCommand");
 		action.setArgumentValue("ElementName", "Lecteur_Audio");
-		// action.setArgumentValue("Command", "pause");
 		action.setArgumentValue("Command", "next");
 		action.setArgumentValue("Argument", url);
 		setPostControl(action);
@@ -145,7 +144,8 @@ public class MyControlPoint extends ControlPoint implements
 
 		Action action = audioDevice.getAction("ExecuteCommand");
 		action.setArgumentValue("ElementName", "Lecteur_Audio");
-		action.setArgumentValue("setVolume", volume);
+		action.setArgumentValue("Command", "setVolume");
+		action.setArgumentValue("Argument", volume);
 		setPostControl(action);
 	}
 
