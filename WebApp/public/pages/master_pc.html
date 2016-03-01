@@ -28,11 +28,11 @@
       	</div>
       	<div class="ui-block-b" id="mainColumn">
       		<div class="control" data-role="controlgroup" data-type="horizontal">
-				<a class="ui-btn ui-btn-icon-left ui-icon-play">play</a>
-				<a class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-pause">pause</a>
-				<a class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-next">next</a><br/>
-				
-				<input id="volume" type="range" name="slider-1" id="slider-1" value="60" min="0" max="100" data-mini = "true" data-highlight="true"/>
+				<a id="playBtn" class="ui-btn ui-btn-icon-left ui-icon-play">play</a>
+				<a id="pauseBtn" class="ui-btn ui-btn-icon-left ui-icon-pause">pause</a>
+				<a id="nextBtn" class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-next">next</a><br>
+
+				<input id="volume" type="range" name="slider-1" id="slider-1" value="60" min="0" max="100" data-mini = "true" data-highlight="true">
       		</div>
 			<div class="bgimg">
 				<div class="textZone">
@@ -74,11 +74,52 @@
 
 	$(function() {
 		$("#sortable").sortable();
+
+		var query_all = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>" +
+			"PREFIX blindtest:   <http://localhost:3030/blindtest/data#> " +
+			"PREFIX rdfs:       <http://www.w3.org/2000/01/rdf-schema#>" +
+			"PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>" +
+			"PREFIX dbp:        <http://dbpedia.org/property/>" +
+			"PREFIX prop-fr:        <http://fr.dbpedia.org/property/>" +
+			"PREFIX foaf: <http://xmlns.com/foaf/0.1/>" +
+			"SELECT * WHERE { " +
+			"SERVICE <http://localhost:3030/blindtest/sparql> {" +
+			"?subject blindtest:hasArtist ?artist_blindtest. " +
+			"?subject blindtest:hasName ?title." +
+			"?subject blindtest:hasImage ?image." +
+			"?subject blindtest:hasFile ?file .}}" ;
+
+		$.post("http://localhost:3030/blindtest/query", {query: query_all}, function (data, status) {
+			renderPlayList(data);
+		});
 	});
 
-	$("#lampe").click(function () {
+	$("#playBtn").click(function () {
 
-		$.get("http://localhost:8000/audio/on", function (data, status) {
+		var url = "http://3s-media.enstb.org/lina/blindtest/musics/Animals.mp3";
+		$.get("http://localhost:8000/audio/playMusic?musicurl=" + url, function (data, status) {
+			console.log(data, status);
+		});
+	});
+
+	$("#pauseBtn").click(function () {
+		$.get("http://localhost:8000/audio/pauseMusic", function (data, status) {
+			console.log(data, status);
+		});
+	});
+
+	$("#nextBtn").click(function () {
+
+		var url = "http://public.enst-bretagne.fr/~irebai/media/audio/RogerSubirana.mp3";
+		$.get("http://localhost:8000/audio/playMusic?musicurl=" + url, function (data, status) {
+			console.log(data, status);
+		});
+	});
+
+	$("#volumeBtn").click(function () {
+
+		var value = 80;
+		$.get("http://localhost:8000/audio/setVolume?value=" + value, function (data, status) {
 			console.log(data, status);
 		});
 	});
@@ -94,7 +135,7 @@
 	function renderPlayList (data) {
 
 		var musics = data.results.bindings.reduce(function (res, music) {
-			return res + "<li><a href='#'><img src='" + music.image.value + "'><h2>" + music.title.value + "</h2><p>" + music.artist.value + "</p></a></li>";
+			return res + "<li><a href='#'><img src='" + music.image.value + "'><h2>" + music.title.value + "</h2><p>" + music.artist_blindtest.value + "</p></a></li>";
 		}, "");
 		$("#sortable").html(musics).listview("refresh");
 	}
@@ -129,10 +170,6 @@
 
 		socket.on("update", function (data) {
 			renderPlayersScores(data);
-		});
-
-		socket.on("music", function (data) {
-			renderPlayList(data);
 		});
 	});
 </script>

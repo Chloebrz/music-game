@@ -41,9 +41,6 @@ io.sockets.on("connect", function (socket, pseudo, music_style) {
 
         console.log("Game started");
         socket.emit("init", players);
-
-        var jsonObj = require("./test.json");
-        socket.emit("music", jsonObj);
     });
 
     socket.on("buzz", function () {
