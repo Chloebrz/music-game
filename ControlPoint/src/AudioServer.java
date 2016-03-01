@@ -3,7 +3,6 @@ package src;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,6 @@ public class AudioServer implements HttpHandler {
 	private MyControlPoint control;
 
 	public AudioServer(MyControlPoint control) {
-
 		this.control = control;
 	}
 
@@ -27,16 +25,13 @@ public class AudioServer implements HttpHandler {
 	public void handle(HttpExchange t) throws IOException {
 
 		URI uri = t.getRequestURI();
-		// System.out.println(uri.toString());
+		System.out.println("URI: " + uri);
 
 		List<NameValuePair> params = URLEncodedUtils.parse(uri, "UTF-8");
 		// cover params to map
 		Map<String, String> paramap = new HashMap<String, String>();
 		for (NameValuePair pair : params) {
 			paramap.put(pair.getName(), pair.getValue());
-		}
-		for (NameValuePair param : params) {
-			// System.out.println(param.getName() + " : " + param.getValue());
 		}
 
 		// -> /audio/playMusic?musicurl=...
@@ -51,15 +46,17 @@ public class AudioServer implements HttpHandler {
 		// -> /audio/pauseMusic
 		else if (uri.getPath().contains("pauseMusic")) {
 
-			System.out.println("pauseMusic");
+			System.out.println("Action:pauseMusic");
 			control.pauseMusic();
+		}
+		
+		// -> /audio/setVolume?value=(0-100)
+		else if (uri.getPath().contains("setVolume")) {
 
-			// -> /audio/setVolumne?value=(0-100)
-		} else if (uri.getPath().contains("setVolumne")) {
-			System.out.println("setVolumne");
+			System.out.println("Action:setVolume");
 			if (paramap.containsKey("value")) {
 				System.out.println("value:" + paramap.get("value"));
-				control.setVolumne(Integer.parseInt(paramap.get("value")));
+				control.setVolume(Integer.parseInt(paramap.get("value")));
 			}
 		}
 
@@ -69,6 +66,5 @@ public class AudioServer implements HttpHandler {
 		OutputStream os = t.getResponseBody();
 		os.write(response.getBytes());
 		os.close();
-
 	}
 }

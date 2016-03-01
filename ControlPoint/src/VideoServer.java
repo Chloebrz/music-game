@@ -14,13 +14,12 @@ public class VideoServer implements HttpHandler {
 	private MyControlPoint control;
 
 	public VideoServer(MyControlPoint control) {
-
 		this.control = control;
 	}
 
 	@Override
 	public void handle(HttpExchange t) throws IOException {
-		
+
 		// -> /video -> requestBody:(html content)
 		URI uri = t.getRequestURI();
 		System.out.println(uri.toString());
@@ -32,7 +31,7 @@ public class VideoServer implements HttpHandler {
 		while ((i = reader.read()) != -1) {
 			sb.append((char) i);
 		}
-		//System.out.println("the body:" + sb.toString());
+
 		in.close();
 		String htmlbody = sb.toString();
 
@@ -43,6 +42,6 @@ public class VideoServer implements HttpHandler {
 		os.write(response.getBytes());
 		os.close();
 
-		control.displayHtml(htmlbody);;
+		control.displayHtml(htmlbody);
 	}
 }

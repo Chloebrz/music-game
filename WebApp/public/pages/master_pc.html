@@ -37,11 +37,10 @@
 			</ul>
       	</div>
       	<div class="ui-block-b" id="mainColumn">
-      		<div data-role="controlgroup" data-type="horizontal">
-				<a class="ui-btn ui-btn-icon-left ui-icon-play">play</a>
+      		<div class="control" data-role="controlgroup" data-type="horizontal">
+				<a id="playBtn" class="ui-btn ui-btn-icon-left ui-icon-play">play</a>
 				<a class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-next">next</a>
-				<a class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-volume">volume</a>
-				<a id="lampe" class="btn btn-danger ui-btn ui-corner-all ui-btn-icon-left ui-icon-volume">Allumer la lampe</a>
+				<a id="volumeBtn" class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-volume">volume</a>
       		</div>
 			<div class="bgimg">
 				<div class="textZone">
@@ -78,8 +77,13 @@
 <script>
 	var socket = io();
 
-	$("#lampe").click(function () {
-		$.get("http://localhost:8000/test", function (data, status) {
+	$(function() {
+		$("#sortable").sortable();
+	});
+
+	$("#playBtn").click(function () {
+
+		$.get("http://localhost:8000/audio/playMusic?musicurl=http://public.enst-bretagne.fr/~irebai/media/audio/RogerSubirana.mp3", function (data, status) {
 			console.log(data, status);
 		});
 	});
