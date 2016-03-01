@@ -64,9 +64,15 @@
 	</div>
 </div>
 
-<div id="dialog-confirm" title="Buzz">
-	<h3><span id="name">XX</span> a buzzé !</h3>
-    <p>Est-ce la bonne réponse ?</p>
+<div data-role="popup" id="dialog-confirm">
+	<div data-role="header">
+		<h2><span id="name">XX</span> a buzzé !</h2>
+	</div>
+	<div role="main" class="ui-content">
+		<p>Est-ce la bonne réponse ?</p>
+		<button id="yes">Oui</button>
+		<button id="no">Non</button>
+	</div>
 </div>
 
 <script>
@@ -94,12 +100,15 @@
 		});
 	});
 
-	$("#playBtn").click(function () {
-
-		var url = "http://3s-media.enstb.org/lina/blindtest/musics/Animals.mp3";
+	function playMusic() {
+		var url = $("ul#sortable li:first").attr("url");
 		$.get("http://localhost:8000/audio/playMusic?musicurl=" + url, function (data, status) {
 			console.log(data, status);
 		});
+	}
+
+	$("#playBtn").click(function () {
+		playMusic();
 	});
 
 	$("#pauseBtn").click(function () {
@@ -110,10 +119,8 @@
 
 	$("#nextBtn").click(function () {
 
-		var url = "http://public.enst-bretagne.fr/~irebai/media/audio/RogerSubirana.mp3";
-		$.get("http://localhost:8000/audio/playMusic?musicurl=" + url, function (data, status) {
-			console.log(data, status);
-		});
+		$("#sortable li:last").after($("#sortable li:eq(0)"));
+		playMusic();
 	});
 
 	$("#volumeBtn").click(function () {
@@ -135,7 +142,7 @@
 	function renderPlayList (data) {
 
 		var musics = data.results.bindings.reduce(function (res, music) {
-			return res + "<li><a href='#'><img src='" + music.image.value + "'><h2>" + music.title.value + "</h2><p>" + music.artist_blindtest.value + "</p></a></li>";
+			return res + "<li url=" + music.file.value + "><a href='#'><img src='" + music.image.value + "'><h2>" + music.title.value + "</h2><p>" + music.artist_blindtest.value + "</p></a></li>";
 		}, "");
 		$("#sortable").html(musics).listview("refresh");
 	}
@@ -152,20 +159,15 @@
 
 			$("#name").html(data);
 
-			$("#dialog-confirm").dialog({
-				resizable: false,
-				height:140,
-				modal: true,
-				buttons: {
-					"Oui": function () {
-						$(this).dialog("close");
-						socket.emit("score", data);
-					},
-					"Non": function () {
-						$(this).dialog("close");
-					}
-				}
-			});
+			// $("#dialog-confirm").popup("open");
+			//
+			// $("#yes").click(function () {
+			// 	$("#dialog-confirm").popup("close");
+			// 	socket.emit("score", data);
+			// });
+			// $("#no").click(function () {
+			// 	$("#dialog-confirm").popup("close");
+			// });
 		});
 
 		socket.on("update", function (data) {
