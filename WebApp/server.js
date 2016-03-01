@@ -38,8 +38,12 @@ io.sockets.on("connect", function (socket, pseudo, music_style) {
     });
 
     socket.on("gameOn", function () {
+
         console.log("Game started");
         socket.emit("init", players);
+
+        var jsonObj = require("./test.json");
+        socket.emit("music", jsonObj);
     });
 
     socket.on("buzz", function () {
@@ -48,6 +52,7 @@ io.sockets.on("connect", function (socket, pseudo, music_style) {
     });
 
     socket.on("score", function (data) {
+
         console.log("Player " + data + " scored!");
 
         players = players.map(function (player) {

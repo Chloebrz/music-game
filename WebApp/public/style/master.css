@@ -23,17 +23,14 @@
 
 .textZone{
 	height:80vh;
-    background-color:rgba(0, 0, 0, 0.7);
+    background-color:rgba(0, 0, 0, 0.5);
     color: white;
-    padding: 5px;
+    padding: 10px 25px;
+    text-align: justify;
 }
 
-dialog {
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 6px;
-    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-    width: 300px;
-    padding: 0 50px 20px 50px;
+.control {
+    text-align: center;
 }
 
 #mainColumn {
@@ -52,6 +49,12 @@ dialog {
     margin-right: 2%;
 }
 
+#players-score {
+    border-width: 0 0 1px;
+    border-style: solid;
+    border-color: #ddd;
+}
+
 .ui-li-player {
     padding: 10px 10px !important;
     border-width: 1px 0 0;
@@ -62,4 +65,13 @@ dialog {
     text-shadow: 0 1px 0 #f3f3f3;
     font-size: 16px;
     height: 22px;
+}
+
+#dialog-confirm {
+    height: 120px !important;
+    background-color: white;
+}
+
+.ui-dialog-buttonpane {
+    margin: 0 !important;
 }

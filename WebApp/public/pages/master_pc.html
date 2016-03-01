@@ -3,9 +3,14 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="../style/master.css">
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+	<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 </head>
 <body >
 <div data-role="page" data-theme="a" class="type-home">
@@ -19,22 +24,7 @@
 	<div class="ui-grid-b">
 		<div class="ui-block-a" id="leftSecond">
 	      	<h3>PlayList<h3>
-			<ul data-role="listview">
-				<li><a href="#">
-				<img src="../images/master/pop.png">
-				<h2>Pop music name</h2>
-				<p>I love this music...</p></a></li>
-
-				<li><a href="#">
-				<img src="../images/master/jazz.jpg">
-				<h2>Jazz1 name</h2>
-				<p>I love this music...</p></a></li>
-
-				<li><a href="#">
-				<img src="../images/master/blues.jpg">
-				<h2>who I am</h2>
-				<p>Beatles</p></a></li>
-			</ul>
+			<ul data-role="listview" id="sortable"></ul>
       	</div>
       	<div class="ui-block-b" id="mainColumn">
       		<div class="control" data-role="controlgroup" data-type="horizontal">
@@ -51,13 +41,20 @@
 			</div>
       	</div>
       	<div class="ui-block-c" id="rightSecond">
-			<h3>Joueurs :<h3>
+			<h3>Joueurs<h3>
 			<ul id="players-score" class="ui-listview"></ul>
-			<h3>Music voted:<h3>
+
+			<h3>Titres recommandés<h3>
 			<ul data-role="listview">
-				<li><a data-icon="plus">Pop</a></li>
-				<li><a data-icon="plus">Jazz</a></li>
-				<li><a data-icon="plus">Blues</a></li>
+				<li><a href="#">
+				<img src="../images/master/blues.jpg">
+				<h2>who I am</h2>
+				<p>Beatles</p></a></li>
+
+				<li><a href="#">
+				<img src="../images/master/pop.png">
+				<h2>Pop music name</h2>
+				<p>I love this music...</p></a></li>
 			</ul>
       	</div>
 	</div>
@@ -65,15 +62,11 @@
 	</div>
 </div>
 
-<dialog id="dialog">
+<div id="dialog-confirm" title="Buzz">
 	<h3><span id="name">XX</span> a buzzé !</h3>
-	<p>Est-ce la bonne réponse ?</p>
-	<button id="yes" class="btn btn-primary" value="oui">Oui</button>
-	<button id="no" class="btn btn-default" value="non">Non</button>
-</dialog>
+    <p>Est-ce la bonne réponse ?</p>
+</div>
 
-<script src="/socket.io/socket.io.js"></script>
-<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
 	var socket = io();
 
@@ -96,6 +89,14 @@
 		$("#players-score").html(players);
 	}
 
+	function renderPlayList (data) {
+
+		var musics = data.results.bindings.reduce(function (res, music) {
+			return res + "<li><a href='#'><img src='" + music.image.value + "'><h2>" + music.title.value + "</h2><p>" + music.artist.value + "</p></a></li>";
+		}, "");
+		$("#sortable").html(musics).listview("refresh");
+	}
+
 	socket.on("connect", function () {
 
 		socket.emit("gameOn");
@@ -108,20 +109,28 @@
 
 			$("#name").html(data);
 
-			var dialog = document.getElementById("dialog");
-			dialog.showModal();
-
-			document.getElementById("no").onclick = function () {
-				dialog.close();
-			};
-			document.getElementById("yes").onclick = function () {
-				socket.emit("score", data);
-				dialog.close();
-			};
+			$("#dialog-confirm").dialog({
+				resizable: false,
+				height:140,
+				modal: true,
+				buttons: {
+					"Oui": function () {
+						$(this).dialog("close");
+						socket.emit("score", data);
+					},
+					"Non": function () {
+						$(this).dialog("close");
+					}
+				}
+			});
 		});
 
 		socket.on("update", function (data) {
 			renderPlayersScores(data);
+		});
+
+		socket.on("music", function (data) {
+			renderPlayList(data);
 		});
 	});
 </script>
