@@ -12,7 +12,7 @@
 	<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 </head>
-<body>
+<body >
 <div data-role="page" data-theme="a" class="type-home">
 
 	  <div data-role="header"  data-position="fixed">
@@ -32,9 +32,7 @@
 				<a id="pauseBtn" class="ui-btn ui-btn-icon-left ui-icon-pause">pause</a>
 				<a id="nextBtn" class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-next">next</a><br>
 
-				<div id="volume-div">
-                    <input id="volume" type="range" name="slider-1" id="slider-1" value="60" min="0" max="100" data-mini = "true" data-highlight="true">
-                </div>
+				<input id="volume" type="range" name="slider-1" id="slider-1" value="60" min="0" max="100" data-mini = "true" data-highlight="true">
       		</div>
 			<div class="bgimg">
 				<div class="textZone">
@@ -49,16 +47,7 @@
 			<ul id="players-score" class="ui-listview"></ul>
 
 			<h3>Titres recommandés<h3>
-			<ul data-role="listview">
-				<li><a href="#">
-				<img src="../images/master/blues.jpg">
-				<h2>who I am</h2>
-				<p>Beatles</p></a></li>
-
-				<li><a href="#">
-				<img src="../images/master/pop.png">
-				<h2>Pop music name</h2>
-				<p>I love this music...</p></a></li>
+			<ul data-role="listview" id="recommandation">
 			</ul>
       	</div>
 	</div>
@@ -82,6 +71,7 @@
 
 	$(function() {
 		$("#sortable").sortable();
+      
 
 		var query_all = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>" +
 			"PREFIX blindtest:   <http://localhost:3030/blindtest/data#> " +
@@ -101,11 +91,41 @@
 			renderPlayList(data);
 		});
 	});
+   
+   function render_recommandation (categories)  {
+
+      var query_recommandation = 'PREFIX blindtest:   <http://localhost:3030/blindtest/data#> ' +
+
+                                 'SELECT * WHERE { ' +
+     
+                                 'SERVICE <http://localhost:3030/blindtest/sparql> {';
+      var compteur = 0;
+      categories.forEach(function(category) {
+         if (compteur!=0){
+            query_recommandation += 'UNION ' ;
+         }
+         compteur ++;
+         query_recommandation += '{' +    
+
+           '?subject blindtest:hasCategory ?category .' +
+           '?subject blindtest:hasArtist ?artist_blindtest.' +
+           '?subject blindtest:hasName ?title.' +
+           '?subject blindtest:hasImage ?image.' +
+           '?subject blindtest:hasFile ?file .' +
+           'FILTER regex(?category,"' + category + '")}';
+           
+      });
+
+      query_recommandation += '}}'  ;
+
+		$.post("http://localhost:3030/blindtest/query", {query: query_recommandation}, function (data, status) {
+			renderRecommandation(data);
+		});
+	}
 
 	function playMusic() {
 		var url = $("ul#sortable li:first").attr("url");
 		$.get("http://localhost:8000/audio/playMusic?musicurl=" + url, function (data, status) {
-			console.log(data, status);
 		});
 	}
 
@@ -120,13 +140,14 @@
 	});
 
 	$("#nextBtn").click(function () {
+
 		$("#sortable li:last").after($("#sortable li:eq(0)"));
 		playMusic();
 	});
 
-	$("#volume-div").on("slidestop", function () {
+	$("#volumeBtn").click(function () {
 
-		var value = $("#volume").val();
+		var value = 80;
 		$.get("http://localhost:8000/audio/setVolume?value=" + value, function (data, status) {
 			console.log(data, status);
 		});
@@ -147,6 +168,15 @@
 		}, "");
 		$("#sortable").html(musics).listview("refresh");
 	}
+   
+   function renderRecommandation (data) {
+      var musics = data.results.bindings.reduce(function (res, music) {
+			return res + "<li url=" + music.file.value + "><a href='#'><img src='" + music.image.value + "'><h2>" + music.title.value + "</h2><p>" + music.artist_blindtest.value + "</p></a></li>";
+		}, "");
+      $("#recommandation").html(musics).listview("refresh");
+		
+	}
+   
 
 	socket.on("connect", function () {
 
@@ -154,6 +184,9 @@
 
 		socket.on("init", function (data) {
 			renderPlayersScores(data);
+         var categories = data.map(function (player) {
+			return player.music_style;});
+         render_recommandation (categories);
 		});
 
 		socket.on("buzz", function (data) {
