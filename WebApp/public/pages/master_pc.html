@@ -64,14 +64,48 @@
 	</div>
 </div>
 
-<div data-role="popup" id="dialog-confirm">
-	<div data-role="header">
-		<h2><span id="name">XX</span> a buzzé !</h2>
-	</div>
-	<div role="main" class="ui-content">
-		<p>Est-ce la bonne réponse ?</p>
-		<button id="yes">Oui</button>
-		<button id="no">Non</button>
+<div id="dialog-confirm">
+	<h2 style="box-shadow:0px 1px 1px #555; background:#EEE;top:0;margin-top:0;text-align:center;margin-bottom:0;border-radius:5px 5px 0px 0px;"><span id="name">XX</span> a buzzé !</h2>
+	<div id="dialog-main" style="margin-left:10px;">
+		<p style="font-size:15pt;margin-bottom:20px;">Est-ce la bonne réponse ?</p>
+		<button class="dialog-button" id="yes" style="margin-left:14%;margin-right:1%;">Oui</button>
+		<button class="dialog-button" id="no">Non</button>
+		<style>
+			.dialog-button{
+				width:35%;
+				height:40px;
+				background:#ECECEC;
+				color:black;
+				cursor:pointer;
+				border:none;
+				border-radius:3px;
+				box-shadow:0px 0px 2px #555;
+				font-weight:900;
+				font-size:15pt;
+			}
+			.dialog-button:hover{
+				background:#6C7A89;
+				color:white;
+			}
+		#dialog-confirm{
+			position:absolute;
+			border:3px solid rgb(51, 136, 204);
+			top:-300px;
+			left:40%;
+			width:350px;
+			border-radius:5px;
+			height:150px!important;
+			background:#f9f9f9;
+			box-shadow:0px 0px 100px black;
+			display:block;
+			opacity:0;
+			transition:opacity 0.3s ease;
+		}
+		#dialog-confirm.popup{
+			top:45%;
+			opacity:1;
+		}
+		</style>
 	</div>
 </div>
 
@@ -159,15 +193,16 @@
 
 			$("#name").html(data);
 
-			// $("#dialog-confirm").popup("open");
-			//
-			// $("#yes").click(function () {
-			// 	$("#dialog-confirm").popup("close");
-			// 	socket.emit("score", data);
-			// });
-			// $("#no").click(function () {
-			// 	$("#dialog-confirm").popup("close");
-			// });
+			$("#dialog-confirm").attr("class", "popup");
+
+			$("#yes").click(function () {
+				$("#dialog-confirm").attr("class", "");
+				socket.emit("score", data);
+			});
+			$("#no").click(function () {
+				$("#dialog-confirm").attr("class", "");
+			});
+
 		});
 
 		socket.on("update", function (data) {
