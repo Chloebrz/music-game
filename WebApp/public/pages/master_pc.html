@@ -100,10 +100,8 @@
 		$("#sortable").sortable();
 	});
 
-
-	$("#playBtn").click(function () {
-
-		$.get("http://localhost:8000/audio/playMusic?musicurl=http://public.enst-bretagne.fr/~irebai/media/audio/RogerSubirana.mp3", function (data, status) {
+	$("#lampe").click(function () {
+		$.get("http://localhost:8000/audio/on", function (data, status) {
 			console.log(data, status);
 		});
 	});
