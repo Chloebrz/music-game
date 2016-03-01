@@ -8,8 +8,8 @@
     /* Make your icon fit */
     background-size: 18px 18px;
 }
-.ui-icon-volume:after {
-    background-image: url("../images/master/volume.png");
+.ui-icon-pause:after {
+    background-image: url("../images/master/pause.png");
     /* Make your icon fit */
     background-size: 18px 18px;
 }
@@ -74,4 +74,8 @@
 
 .ui-dialog-buttonpane {
     margin: 0 !important;
+}
+
+#volume{
+display: none;
 }
