@@ -76,3 +76,6 @@
     margin: 0 !important;
 }
 
+#volume{
+    display: none;
+}
