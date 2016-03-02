@@ -198,9 +198,9 @@
 
 			var description = "<h1>" + title + "</h1>" +
 				"<h3>" + desc.artist_label.value + "</h3>" +
-				"<p><strong>Album : </strong>" + desc.album.value + "</p>" +
+				"<p><strong>Album : </strong>" + filtreString(desc.album.value) + "</p>" +
 				"<p><strong>Date de sortie : </strong>" + desc.date.value + "</p>" +
-				"<p><strong>Genre : </strong>" + desc.genre.value + "</p>" +
+				"<p><strong>Genre : </strong>" + filtreString(desc.genre.value) + "</p>" +
 				"<p>" + desc.description.value + "</p>" +
 				"<img src=" + image + " />";
 
@@ -247,6 +247,19 @@
 		}, "");
 		$("#sortable").html(musics).listview("refresh");
 	}
+   
+   function filtreString (string){
+      var substring = "resource";
+      var resultat = "";
+      var position = string.indexOf(substring)+9;
+      if (position > 8){
+         resultat = string.substring(position);  
+      }
+      else{
+         resultat = string;
+      }
+      return resultat.replace('_',' ');
+   }
 
    function renderRecommandation (data) {
 
