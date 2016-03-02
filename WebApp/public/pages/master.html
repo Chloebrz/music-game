@@ -63,6 +63,7 @@
 <script>
 	var socket = io();
 	var dataMusic = {};
+   var adresseIP = "10.77.5.67";
 
 	$(function() {
 
@@ -238,7 +239,7 @@
 	}
    
    function renderUriProjecteur () {
-      return "http://10.77.5.67:8080/projecteur?title="+dataMusic.title+"&artist="+dataMusic.artist+"&album="+dataMusic.album+"&date="+dataMusic.date+"&genre="+dataMusic.genre+"&description="+dataMusic.description+"&image="+dataMusic.image;
+      return "http://"+adresseIP+":8080/projecteur?title="+dataMusic.title+"&artist="+dataMusic.artist+"&album="+dataMusic.album+"&date="+dataMusic.date+"&genre="+dataMusic.genre+"&description="+dataMusic.description+"&image="+dataMusic.image;
    }
  
 	function renderDescription () {

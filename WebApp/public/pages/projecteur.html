@@ -1,15 +1,10 @@
 <!DOCTYPE html>
 <html class ="ui-mobile">
 <head>
-
+   <link rel="stylesheet" type="text/css" href="../style/projecteur.css">
 </head>
 <body >
    <div data-role="page" data-theme="a" class="type-home">
-
-        <div data-role="header"  data-position="fixed">
-         <h1>Music Puzzle</h1>
-        </div>
-
       <div data-role="main" >
 
       <div class="ui-grid-b">
@@ -46,8 +41,6 @@
 			vars[key] = value !== undefined ? value : '';
 		}
 	);
-        
-    console.log(vars);
     document.getElementById("title").innerHTML=decodeURIComponent(vars.title);
     document.getElementById("artist").innerHTML=decodeURIComponent(vars.artist);
     document.getElementById("album").innerHTML=decodeURIComponent(vars.album);
