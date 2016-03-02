@@ -220,8 +220,8 @@ public void wrongAnswer(String playerName) {
 		}
 
 		Action photoAction = projectorDevice.getAction("ExecuteCommand");
-		photoAction.setArgumentValue("ElementName", "TextDisplayer");
-		photoAction.setArgumentValue("Command", "setText");
+		photoAction.setArgumentValue("ElementName", "HTMLDisplayer");
+		photoAction.setArgumentValue("Command", "setHTML");
 		photoAction.setArgumentValue("Argument", url);
 
 		setPostControl(photoAction);

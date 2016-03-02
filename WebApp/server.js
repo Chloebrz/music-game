@@ -77,8 +77,6 @@ io.sockets.on("connect", function (socket, pseudo, music_style) {
     });
 
     socket.on("displayResponse", function (data) {
-
-        console.log("display response");
         socket.broadcast.emit("displayResponse", data);
     });
 
