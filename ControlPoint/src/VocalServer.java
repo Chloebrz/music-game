@@ -34,12 +34,24 @@ public class VocalServer implements HttpHandler {
 			paramap.put(pair.getName(), pair.getValue());
 		}
 
-		// -> /vocal/annoucePlayer?playerName=...
-		if (uri.getPath().contains("annoucePlayer")) {
+		// -> /vocal/anouncePlayer?playerName=...
+		if (uri.getPath().contains("anouncePlayer")) {
 
-			System.out.println("Action:annoucePlayer");
+			System.out.println("Action:anouncePlayer");
 			if (paramap.containsKey("playerName")) {
 				control.announcePlayer(paramap.get("playerName"));
+			}
+		} else if (uri.getPath().contains("congrats")) {
+
+			System.out.println("Action:congrats");
+			if (paramap.containsKey("playerName")) {
+				control.congrats(paramap.get("playerName"));
+			}
+		} else if (uri.getPath().contains("wrongAnswer")) {
+
+			System.out.println("Action:wrongAnswer");
+			if (paramap.containsKey("playerName")) {
+				control.wrongAnswer(paramap.get("playerName"));
 			}
 		}
 

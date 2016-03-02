@@ -156,7 +156,7 @@ public class MyControlPoint extends ControlPoint implements
 		action.setArgumentValue("Argument", volume);
 		setPostControl(action);
 	}
-	
+
 	public void announcePlayer(String playerName) {
 
 		if (vocalDevice == null) {
@@ -174,6 +174,40 @@ public class MyControlPoint extends ControlPoint implements
 		setPostControl(action);
 	}
 
+	public void congrats(String playerName) {
+
+	if (vocalDevice == null) {
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		announcePlayer(playerName);
+		return;
+	}
+
+	Action action = vocalDevice.getAction("Speak");
+	action.setArgumentValue("Text", "Félicitations " + playerName + "! C'est la bonne réponse!");
+	setPostControl(action);
+}
+
+public void wrongAnswer(String playerName) {
+
+	if (vocalDevice == null) {
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		announcePlayer(playerName);
+		return;
+	}
+
+	Action action = vocalDevice.getAction("Speak");
+	action.setArgumentValue("Text", "Ce n'est pas la bonne réponse " + playerName + "!");
+	setPostControl(action);
+}
+
 	public void displayHtml(String url) {
 
 		if (projectorDevice == null) {
@@ -184,7 +218,7 @@ public class MyControlPoint extends ControlPoint implements
 			}
 			displayHtml(url);
 		}
-		
+
 		Action photoAction = projectorDevice.getAction("ExecuteCommand");
 		photoAction.setArgumentValue("ElementName", "TextDisplayer");
 		photoAction.setArgumentValue("Command", "setText");
@@ -193,4 +227,3 @@ public class MyControlPoint extends ControlPoint implements
 		setPostControl(photoAction);
 	}
 }
-

@@ -237,11 +237,11 @@
 		if (position > 8) resultat = string.substring(position);
 		return resultat.replace('_', ' ');
 	}
-   
+
    function renderUriProjecteur () {
       return "http://"+adresseIP+":8080/projecteur?title="+dataMusic.title+"&artist="+dataMusic.artist+"&album="+dataMusic.album+"&date="+dataMusic.date+"&genre="+dataMusic.genre+"&description="+dataMusic.description+"&image="+dataMusic.image;
    }
- 
+
 	function renderDescription () {
 		return "<h1>" + dataMusic.title + "</h1>" +
 			"<h3>" + dataMusic.artist + "</h3>" +
@@ -280,6 +280,9 @@
 			$("#dialog-confirm").attr("class", "popup");
 
 			$("#yes").unbind().click(function () {
+				$.get("http://localhost:8000/vocal/congrats?playerName=" + playerName, function (data, status) {
+					console.log(data, status);
+				});
 
 				$("#dialog-confirm").attr("class", "");
 				socket.emit("score", playerName);
@@ -289,6 +292,10 @@
 				});
 			});
 			$("#no").unbind().click(function () {
+				$.get("http://localhost:8000/vocal/wrongAnswer?playerName=" + playerName, function (data, status) {
+					console.log(data, status);
+				});
+
 				$("#dialog-confirm").attr("class", "");
 			});
 		});
