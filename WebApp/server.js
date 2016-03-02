@@ -23,7 +23,7 @@ app.get("/player", function (req, res) {
     res.sendFile(path.join(__dirname + "/public/pages/player.html"));
 });
 
-// the players who joined the game {name: Alice, style: pop, score:2}
+// the players who joined the game {name: Alice, music_style: pop, score:2}
 var players = [];
 
 io.sockets.on("connect", function (socket, pseudo, music_style) {
