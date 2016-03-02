@@ -23,6 +23,10 @@ app.get("/player", function (req, res) {
     res.sendFile(path.join(__dirname + "/public/pages/player.html"));
 });
 
+app.get("/projecteur", function (req, res) {
+    res.sendFile(path.join(__dirname + "/public/pages/projecteur.html"));
+});
+
 // the players who joined the game {name: Alice, music_style: pop, score:2}
 var players = [];
 

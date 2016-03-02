@@ -236,9 +236,12 @@
 		if (position > 8) resultat = string.substring(position);
 		return resultat.replace('_', ' ');
 	}
-
+   
+   function renderUriProjecteur () {
+      return "http://10.77.5.67:8080/projecteur?title="+dataMusic.title+"&artist="+dataMusic.artist+"&album="+dataMusic.album+"&date="+dataMusic.date+"&genre="+dataMusic.genre+"&description="+dataMusic.description+"&image="+dataMusic.image;
+   }
+ 
 	function renderDescription () {
-
 		return "<h1>" + dataMusic.title + "</h1>" +
 			"<h3>" + dataMusic.artist + "</h3>" +
 			"<p><strong>Album : </strong>" + dataMusic.album + "</p>" +
@@ -280,7 +283,7 @@
 				$("#dialog-confirm").attr("class", "");
 				socket.emit("score", playerName);
 
-				$.post("http://localhost:8000/video", renderDescription(), function (data, status) {
+				$.post("http://localhost:8000/video", renderUriProjecteur(), function (data, status) {
 					console.log(data, status);
 				});
 			});

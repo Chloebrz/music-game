@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html class ="ui-mobile">
+<head>
+
+</head>
+<body >
+   <div data-role="page" data-theme="a" class="type-home">
+
+        <div data-role="header"  data-position="fixed">
+         <h1>Music Puzzle</h1>
+        </div>
+
+      <div data-role="main" >
+
+      <div class="ui-grid-b">
+         <div class="ui-block-a" id="leftSecond">
+            <div class="chanson">
+               <h1 id="title">LeTitreDeLaChanson</h1>
+            </div>
+            <div class="artiste">
+               <h3 id="artist">LeNomDeLArtiste</h3>
+            </div>
+            <div class="album">
+               <p><strong>Album : </strong><span id="album">LeNomDeLAlbum</span></p>
+            <div>
+            <div class="dateSortie">
+               <p><strong>Date de sortie : </strong><span id="sortie">LaDateDeSortie</span></p>
+            </div>
+            <div class="genre">
+               <p><strong>Genre : </strong><span id="genre">LeGenreDeLaChanson</span></p>
+            </div>
+            <p id="description"></p>
+            <div class="cover">
+               <img src="LUrldelImage" id="image" />
+            </div>
+      </div>
+
+      </div>
+   </div>
+   
+   <script>  
+	var vars = {};
+	window.location.href.replace( location.hash, '' ).replace( 
+		/[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
+		function( m, key, value ) { // callback
+			vars[key] = value !== undefined ? value : '';
+		}
+	);
+        
+    console.log(vars);
+    document.getElementById("title").innerHTML=decodeURIComponent(vars.title);
+    document.getElementById("artist").innerHTML=decodeURIComponent(vars.artist);
+    document.getElementById("album").innerHTML=decodeURIComponent(vars.album);
+    document.getElementById("sortie").innerHTML=decodeURIComponent(vars.date);
+    document.getElementById("genre").innerHTML=decodeURIComponent(vars.genre);
+    document.getElementById("description").innerHTML=decodeURIComponent(vars.description);
+    document.getElementById("image").setAttribute("src",decodeURIComponent(vars.image));
+   </script>  
+</body>
