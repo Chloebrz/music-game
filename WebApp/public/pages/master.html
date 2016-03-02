@@ -64,6 +64,7 @@
 	var dataMusic = {};
 	var adresseIP = "10.77.5.67";
 
+
 	$(function() {
 
 		$("#sortable").sortable();
@@ -116,6 +117,8 @@
 
 	function playMusic() {
 
+      socket.emit("displayScore");
+      
 		var url = $("ul#sortable li:first").attr("url");
 		$.get("http://localhost:8000/audio/playMusic?musicurl=" + url, function (data, status) {
 			console.log(data, status);
@@ -234,7 +237,16 @@
 			dataMusic.album + "&date=" + dataMusic.date + "&genre=" + dataMusic.genre + "&description=" + dataMusic.description +
 			"&image=" + dataMusic.image;
    }
-
+   
+   function renderUriScores (players) {
+      var url = "http://"+adresseIP+":8080/projecteur_scores?";
+      //var compteur = 0;
+      players.forEach(function(player) {
+         url+="player"+"=" +player.pseudo+"_"+player.score+"&";
+      });
+      return url;
+   }
+ 
 	function renderDescription () {
 
 		return "<h1>" + dataMusic.title + "</h1>" +
@@ -271,7 +283,7 @@
 		socket.emit("gameOn");
 
 		socket.on("init", function (data) {
-
+         players=data;
 			renderPlayersScores(data);
          	var categories = data.map(function (player) {
 				return player.music_style;
@@ -315,8 +327,12 @@
 		});
 
 		socket.on("update", function (data) {
+         players=data;
 			renderPlayersScores(data);
 		});
+      
+      
+      
 	});
 </script>
 

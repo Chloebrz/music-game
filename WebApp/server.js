@@ -27,6 +27,10 @@ app.get("/projecteur", function (req, res) {
     res.sendFile(path.join(__dirname + "/public/pages/projecteur.html"));
 });
 
+app.get("/projecteur_scores", function (req, res) {
+    res.sendFile(path.join(__dirname + "/public/pages/projecteur_scores.html"));
+});
+
 // the players who joined the game {name: Alice, music_style: pop, score:2}
 var players = [];
 
@@ -62,6 +66,10 @@ io.sockets.on("connect", function (socket, pseudo, music_style) {
         });
 
         socket.emit("update", players);
+    });
+    
+    socket.on("displayScore", function(){
+      socket.broadcast.emit("displayScore", players);
     });
 
     socket.on("disconnect", function() {
