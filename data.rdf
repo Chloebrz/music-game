@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rdf:RDF [
+   <!ENTITY blindtest   "http://localhost:3030/blindtest/data">
+   <!ENTITY xsd      "http://www.w3.org/2001/XMLSchema#"> ]>
+   
+<rdf:RDF  
+   xmlns:rdf ="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:owl="http://www.w3.org/2002/07/owl#"
+   xmlns:xsd ="&xsd;" 
+   xmlns     ="&blindtest;#" 
+   xml:base  ="&blindtest;-instances" >
+
+<!--Musique de film-->
+<Music ID="my_heart_will_go_on">
+        <hasName>My Heart Will Go On</hasName>
+        <hasCategory>Musique de film</hasCategory>
+        <hasFile>http://3s-media.enstb.org/lina/blindtest/musics/My_Heart_Will_Go_On.mp3</hasFile>
+        <hasArtist>Celine Dion</hasArtist>
+        <hasImage>http://3s-media.enstb.org/lina/blindtest/images/titanic.jpg</hasImage>    
+</Music>
+
+<Music ID="catch_me_if_you_can">
+        <hasName>Catch Me If You Can</hasName>
+        <hasCategory>Musique de film</hasCategory>
+        <hasFile>http://3s-media.enstb.org/lina/blindtest/musics/Catch_Me_If_You_Can.mp3</hasFile>
+        <hasArtist>John Williams</hasArtist>
+        <hasImage>http://3s-media.enstb.org/lina/blindtest/images/catch-me-if-you-can.jpg</hasImage>    
+</Music>
+
+<Music ID="jurassic_park_theme">
+        <hasName>Jurassic Park Theme</hasName>
+        <hasCategory>Musique de film</hasCategory>
+        <hasFile>http://3s-media.enstb.org/lina/blindtest/musics/Jurassic_Park_Main_Theme.mp3</hasFile>
+        <hasArtist>John Williams</hasArtist>
+        <hasImage>http://3s-media.enstb.org/lina/blindtest/images/Jurassic-Park.jpg</hasImage>    
+</Music>
+
+<Music ID="star_wars_episode_I_the_phantom_menace">
+        <hasName>Star Wars Episode I: The Phantom Menace</hasName>
+        <hasCategory>Musique de film</hasCategory>
+        <hasFile>http://3s-media.enstb.org/lina/blindtest/musics/Star_Wars.mp3</hasFile>
+        <hasArtist>John Williams</hasArtist>
+        <hasImage>http://3s-media.enstb.org/lina/blindtest/images/star_wars_episode_i_the_phantom_menace.jpg</hasImage>    
+</Music>
+
+<Music ID="may_it_be">
+        <hasName>May_It_Be</hasName>
+        <hasCategory>Musique de film</hasCategory>
+        <hasFile>http://3s-media.enstb.org/lina/blindtest/musics/May_It_Be.mp3</hasFile>
+        <hasArtist>Howard Shore</hasArtist>
+        <hasImage>http://3s-media.enstb.org/lina/blindtest/images/LeSeigneurDesAnneaux_LaCommunauteDeLAnneau.jpg</hasImage>    
+</Music>
+
+<Music ID="under_the_sea">
+        <hasName>Under the Sea</hasName>
+        <hasCategory>Musique de film</hasCategory>
+        <hasFile>http://3s-media.enstb.org/lina/blindtest/musics/Under_the_Sea.mp3</hasFile>
+        <hasArtist>Various Artists</hasArtist>
+        <hasImage>http://3s-media.enstb.org/lina/blindtest/images/la-petite-sirene.jpg</hasImage>    
+</Music>
+
+
+<!--POP/ROCK-->
+<Music ID="wrecking_ball">
+        <hasName>Wrecking Ball</hasName>
+        <hasCategory>POP/ROCK</hasCategory>
+        <hasFile>http://3s-media.enstb.org/lina/blindtest/musics/Wrecking_Ball.mp3</hasFile>
+        <hasArtist>Miley Cyrus</hasArtist>
+        <hasImage>http://3s-media.enstb.org/lina/blindtest/images/wrecking-ball.png</hasImage>    
+</Music>
+
+<Music ID="roar">
+        <hasName>Roar</hasName>
+        <hasCategory>POP/ROCK</hasCategory>
+        <hasFile>http://3s-media.enstb.org/lina/blindtest/musics/Roar.mp3</hasFile>
+        <hasArtist>Katy Perry</hasArtist>
+        <hasImage>http://3s-media.enstb.org/lina/blindtest/images/katy_perry_roar.png</hasImage>    
+</Music>
+
+<Music ID="animals">
+        <hasName>Animals</hasName>
+        <hasCategory>POP/ROCK</hasCategory>
+        <hasFile>http://3s-media.enstb.org/lina/blindtest/musics/Animals.mp3</hasFile>
+        <hasArtist>Maroon 5</hasArtist>
+        <hasImage>http://3s-media.enstb.org/lina/blindtest/images/maroon5_animals.jpg</hasImage>    
+</Music>
+
+<Music ID="paradise">
+        <hasName>Paradise</hasName>
+        <hasCategory>POP/ROCK</hasCategory>
+        <hasFile>http://3s-media.enstb.org/lina/blindtest/musics/Paradise.mp3</hasFile>
+        <hasArtist>Coldplay</hasArtist>
+        <hasImage>http://3s-media.enstb.org/lina/blindtest/images/Coldplay_Paradise.jpg</hasImage>    
+</Music>
+
+<!--Musique française-->
+<Music ID="moi_lolita">
+        <hasName>Moi... Lolita</hasName>
+        <hasCategory>Musique française</hasCategory>
+        <hasFile>http://3s-media.enstb.org/lina/blindtest/musics/Moi_Lolita.mp3</hasFile>
+        <hasArtist>Alizée</hasArtist>
+        <hasImage>http://3s-media.enstb.org/lina/blindtest/images/moi-lolita.jpg</hasImage>    
+</Music>
+
+
+</rdf:RDF>
