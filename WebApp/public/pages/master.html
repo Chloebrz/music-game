@@ -62,8 +62,7 @@
 <script>
 	var socket = io();
 	var dataMusic = {};
-	var adresseIP = "10.77.5.67";
-
+	var adresseIP = "10.77.5.66";
 
 	$(function() {
 
@@ -85,6 +84,10 @@
 
 		$.post("http://localhost:3030/blindtest/query", {query: query_all}, function (data, status) {
 			renderPlayList(data);
+		});
+
+		$.post("http://localhost:8000/video", "http://" + adresseIP + ":8080/projecteur", function (data, status) {
+			console.log(data, status);
 		});
 	});
 
@@ -117,8 +120,8 @@
 
 	function playMusic() {
 
-      socket.emit("displayScore");
-      
+		socket.emit("displayScore");
+
 		var url = $("ul#sortable li:first").attr("url");
 		$.get("http://localhost:8000/audio/playMusic?musicurl=" + url, function (data, status) {
 			console.log(data, status);
@@ -231,22 +234,6 @@
 		$("#recommandations").html(musics).listview("refresh");
 	}
 
-   function renderUriProjecteur () {
-
-		return "http://" + adresseIP + ":8080/projecteur?title=" + dataMusic.title + "&artist=" + dataMusic.artist + "&album=" +
-			dataMusic.album + "&date=" + dataMusic.date + "&genre=" + dataMusic.genre + "&description=" + dataMusic.description +
-			"&image=" + dataMusic.image;
-   }
-   
-   function renderUriScores (players) {
-      var url = "http://"+adresseIP+":8080/projecteur_scores?";
-      //var compteur = 0;
-      players.forEach(function(player) {
-         url+="player"+"=" +player.pseudo+"_"+player.score+"&";
-      });
-      return url;
-   }
- 
 	function renderDescription () {
 
 		return "<h1>" + dataMusic.title + "</h1>" +
@@ -283,7 +270,7 @@
 		socket.emit("gameOn");
 
 		socket.on("init", function (data) {
-         players=data;
+
 			renderPlayersScores(data);
          	var categories = data.map(function (player) {
 				return player.music_style;
@@ -306,16 +293,14 @@
 			$("#dialog-confirm").attr("class", "popup");
 
 			$("#yes").unbind().click(function () {
+				
 				$.get("http://localhost:8000/vocal/congrats?playerName=" + playerName, function (data, status) {
 					console.log(data, status);
 				});
 
 				$("#dialog-confirm").attr("class", "");
 				socket.emit("score", playerName);
-
-				$.post("http://localhost:8000/video", renderUriProjecteur(), function (data, status) {
-					console.log(data, status);
-				});
+				socket.emit("displayResponse", dataMusic);
 			});
 			$("#no").unbind().click(function () {
 				$.get("http://localhost:8000/vocal/wrongAnswer?playerName=" + playerName, function (data, status) {
@@ -327,12 +312,8 @@
 		});
 
 		socket.on("update", function (data) {
-         players=data;
 			renderPlayersScores(data);
 		});
-      
-      
-      
 	});
 </script>
 
