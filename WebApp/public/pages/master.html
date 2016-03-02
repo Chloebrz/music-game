@@ -270,7 +270,7 @@
 
 			$("#dialog-confirm").attr("class", "popup");
 
-			$("#yes").click(function () {
+			$("#yes").unbind().click(function () {
 
 				$("#dialog-confirm").attr("class", "");
 				socket.emit("score", data);
@@ -279,7 +279,7 @@
 					console.log(data, status);
 				});
 			});
-			$("#no").click(function () {
+			$("#no").unbind().click(function () {
 				$("#dialog-confirm").attr("class", "");
 			});
 		});
