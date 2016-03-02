@@ -43,8 +43,7 @@
 			<ul id="players-score" class="ui-listview"></ul>
 
 			<h3>Titres recommandés<h3>
-			<ul data-role="listview" id="recommandation">
-			</ul>
+			<ul data-role="listview" id="recommandations"></ul>
       	</div>
 	</div>
 
@@ -63,7 +62,7 @@
 <script>
 	var socket = io();
 	var dataMusic = {};
-   var adresseIP = "10.77.5.67";
+	var adresseIP = "10.77.5.67";
 
 	$(function() {
 
@@ -91,21 +90,21 @@
 	function renderRecommandations (categories)  {
 
 		var query_recommandation = "PREFIX blindtest:   <http://localhost:3030/blindtest/data#> " +
-		                         "SELECT * WHERE { " +
-		                         "SERVICE <http://localhost:3030/blindtest/sparql> {";
+									"SELECT * WHERE { " +
+									"SERVICE <http://localhost:3030/blindtest/sparql> {";
 		var compteur = 0;
 		categories.forEach(function(category) {
 
-		 if (compteur!=0) query_recommandation += "UNION " ;
-		 compteur ++;
+			if (compteur!=0) query_recommandation += "UNION " ;
+			compteur ++;
 
-		 query_recommandation += "{" +
-		   "?subject blindtest:hasCategory ?category ." +
-		   "?subject blindtest:hasArtist ?artist_blindtest." +
-		   "?subject blindtest:hasName ?title." +
-		   "?subject blindtest:hasImage ?image." +
-		   "?subject blindtest:hasFile ?file ." +
-		   "FILTER regex(?category,'" + category + "')}";
+			query_recommandation += "{" +
+				"?subject blindtest:hasCategory ?category ." +
+				"?subject blindtest:hasArtist ?artist_blindtest." +
+				"?subject blindtest:hasName ?title." +
+				"?subject blindtest:hasImage ?image." +
+				"?subject blindtest:hasFile ?file ." +
+				"FILTER regex(?category,'" + category + "')}";
 		});
 
 	  	query_recommandation += "}}"  ;
@@ -121,8 +120,6 @@
 		$.get("http://localhost:8000/audio/playMusic?musicurl=" + url, function (data, status) {
 			console.log(data, status);
 		});
-
-		console.log("PLAY MUSIC");
 
 		var title = $("ul#sortable li:first > a > h2").text();
 		var artist = $("ul#sortable li:first > a > p").text();
@@ -216,17 +213,48 @@
 	function renderPlayList (data) {
 
 		var musics = data.results.bindings.reduce(function (res, music) {
-			return res + "<li url=" + music.file.value + "><a href='#'><img src='" + music.image.value + "'><h2>" + music.title.value + "</h2><p>" + music.artist_blindtest.value + "</p></a></li>";
+			return res + "<li id=" + music.file.value + " onclick='titleClicked(this)'><a href='#'><img src='" + music.image.value + "'><h2>" + music.title.value +
+				"</h2><p>" + music.artist_blindtest.value + "</p></a></li>";
 		}, "");
 		$("#sortable").html(musics).listview("refresh");
 	}
 
-   function renderRecommandation (data) {
+	function renderRecommandation (data) {
 
-      var musics = data.results.bindings.reduce(function (res, music) {
-			return res + "<li url=" + music.file.value + "><a href='#'><img src='" + music.image.value + "'><h2>" + music.title.value + "</h2><p>" + music.artist_blindtest.value + "</p></a></li>";
+		var musics = data.results.bindings.reduce(function (res, music) {
+			return res + "<li url=" + music.file.value + " onclick='recommandationClicked(this)'><a href='#'><img src='" + music.image.value + "'><h2>" + music.title.value +
+				"</h2><p>" + music.artist_blindtest.value + "</p></a></li>";
 		}, "");
-      $("#recommandation").html(musics).listview("refresh");
+		$("#recommandations").html(musics).listview("refresh");
+	}
+
+   function renderUriProjecteur () {
+
+		return "http://" + adresseIP + ":8080/projecteur?title=" + dataMusic.title + "&artist=" + dataMusic.artist + "&album=" +
+			dataMusic.album + "&date=" + dataMusic.date + "&genre=" + dataMusic.genre + "&description=" + dataMusic.description +
+			"&image=" + dataMusic.image;
+   }
+
+	function renderDescription () {
+
+		return "<h1>" + dataMusic.title + "</h1>" +
+			"<h3>" + dataMusic.artist + "</h3>" +
+			"<p><strong>Album : </strong>" + dataMusic.album + "</p>" +
+			"<p><strong>Date de sortie : </strong>" + dataMusic.date + "</p>" +
+			"<p><strong>Genre : </strong>" + dataMusic.genre + "</p>" +
+			"<p>" + dataMusic.description + "</p>" +
+			"<img src=" + dataMusic.image + " />";
+	}
+
+	function recommandationClicked (data) {
+
+		var url = data.attributes[0].value;
+		var li = document.getElementById(url);
+		$("#sortable li:eq(0)").after(li);
+	}
+
+	function titleClicked (data) {
+		$("#sortable li:eq(0)").after(data);
 	}
 
 	function filtreString (string) {
@@ -235,21 +263,7 @@
 		var resultat = string;
 
 		if (position > 8) resultat = string.substring(position);
-		return resultat.replace('_', ' ');
-	}
-
-   function renderUriProjecteur () {
-      return "http://"+adresseIP+":8080/projecteur?title="+dataMusic.title+"&artist="+dataMusic.artist+"&album="+dataMusic.album+"&date="+dataMusic.date+"&genre="+dataMusic.genre+"&description="+dataMusic.description+"&image="+dataMusic.image;
-   }
-
-	function renderDescription () {
-		return "<h1>" + dataMusic.title + "</h1>" +
-			"<h3>" + dataMusic.artist + "</h3>" +
-			"<p><strong>Album : </strong>" + dataMusic.album + "</p>" +
-			"<p><strong>Date de sortie : </strong>" + dataMusic.date + "</p>" +
-			"<p><strong>Genre : </strong>" + dataMusic.genre + "</p>" +
-			"<p>" + dataMusic.description + "</p>" +
-			"<img src=" + dataMusic.image + " />";
+		return resultat.replace("_", " ");
 	}
 
 	socket.on("connect", function () {
