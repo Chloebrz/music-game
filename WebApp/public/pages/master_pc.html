@@ -286,6 +286,11 @@
 
 			$("#name").html(data);
 
+			var playerName = data;
+			$.get("http://localhost:8000/vocal/anouncePlayer?playerName=" + playerName, function (data, status) {
+				console.log(data, status);
+			});
+
 			$("#dialog-confirm").attr("class", "popup");
 
 			$("#yes").click(function () {

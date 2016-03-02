@@ -13,9 +13,11 @@ public class MyControlPoint extends ControlPoint implements
 
 	private Device projetorDevice;
 	private Device audioDevice;
+	private Device vocalDevice;
 
 	private final static String PROJETOR_DEVICE_NAME = "LIMSI PhotoTextViewer";
 	private final static String AUDIO_DEVICE_NAME = "LIMSI AudioPlayer";
+	private final static String VOCAL_DEVICE_NAME = "LIMSI Speech";
 
 	public MyControlPoint() {
 
@@ -39,8 +41,10 @@ public class MyControlPoint extends ControlPoint implements
 		HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
 		AudioServer ahandler = new AudioServer(commande);
 		VideoServer vhandler = new VideoServer(commande);
+		VocalServer vohandler = new VocalServer(commande);
 		server.createContext("/audio", ahandler);
 		server.createContext("/video", vhandler);
+		server.createContext("/vocal", vohandler);
 		server.setExecutor(null);
 
 		server.start();
@@ -48,42 +52,46 @@ public class MyControlPoint extends ControlPoint implements
 
 	@Override
 	public void deviceAdded(Device dev) {
-		
+
 		String name = dev.getFriendlyName();
 		System.out.println("Device added: " + name);
 
 		if (name.equals(AUDIO_DEVICE_NAME) && audioDevice == null) audioDevice = dev;
-		
+
 		else if (name.equals(PROJETOR_DEVICE_NAME) && projetorDevice == null) projetorDevice = dev;
+
+		else if (name.equals(VOCAL_DEVICE_NAME) && vocalDevice == null) vocalDevice = dev;
 	}
 
 	@Override
 	public void deviceRemoved(Device dev) {
-		
+
 		String name = dev.getFriendlyName();
 		System.out.println("Device removed: " + name);
 
 		if (name.equals(AUDIO_DEVICE_NAME)) audioDevice = null;
-		
+
 		else if (name.equals(PROJETOR_DEVICE_NAME)) projetorDevice = null;
+
+		else if (name.equals(VOCAL_DEVICE_NAME)) vocalDevice = null;
 	}
-	
+
 	public void setPostControl(Action action) {
-		
+
 		if (action.postControlAction() == true) {
-			
+
 			ArgumentList outArgList = action.getOutputArgumentList();
 			int nOutArgs = outArgList.size();
-			
+
 			for (int n = 0; n < nOutArgs; n++) {
-				
+
 				Argument outArg = outArgList.getArgument(n);
 				String name = outArg.getName();
 				String value = outArg.getValue();
 				System.out.println("Name: " + name + " & value: " + value);
 			}
 		} else {
-			
+
 			UPnPStatus err = action.getStatus();
 			System.out.println("Error Code = " + err.getCode());
 			System.out.println("Error Desc = " + err.getDescription());
@@ -110,7 +118,7 @@ public class MyControlPoint extends ControlPoint implements
 	}
 
 	public void pauseMusic() {
-		
+
 		if (audioDevice == null) {
 			try {
 				Thread.sleep(2000);
@@ -168,6 +176,23 @@ public class MyControlPoint extends ControlPoint implements
 		setPostControl(photoAction);
 	}
 
+	public void announcePlayer(String playerName) {
+
+		if (vocalDevice == null) {
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			announcePlayer(playerName);
+			return;
+		}
+
+		Action action = vocalDevice.getAction("Speak");
+		action.setArgumentValue("Text", playerName + "a buzzé! Quelle est ta réponse " + playerName + "?");
+		setPostControl(action);
+	}
+
 	public void displayHtml(String url) {
 
 		System.out.println("projetor device " + (projetorDevice == null));
@@ -183,8 +208,7 @@ public class MyControlPoint extends ControlPoint implements
 
 		Action photoAction = projetorDevice.getAction("SetText");
 		photoAction.setArgumentValue("Text", url);
-		
+
 		setPostControl(photoAction);
 	}
 }
-
