@@ -185,8 +185,10 @@ public class MyControlPoint extends ControlPoint implements
 			displayHtml(url);
 		}
 		
-		Action photoAction = projectorDevice.getAction("SetText");
-		photoAction.setArgumentValue("Text", url);
+		Action photoAction = projectorDevice.getAction("ExecuteCommand");
+		photoAction.setArgumentValue("ElementName", "TextDisplayer");
+		photoAction.setArgumentValue("Command", "setText");
+		photoAction.setArgumentValue("Argument", url);
 
 		setPostControl(photoAction);
 	}
