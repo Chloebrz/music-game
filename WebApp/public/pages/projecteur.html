@@ -2,6 +2,14 @@
 <html class ="ui-mobile">
 <head>
    <link rel="stylesheet" type="text/css" href="../style/projecteur.css">
+   <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+   <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+   <script src="/socket.io/socket.io.js"></script>
+   <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+   <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+   <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+   <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 </head>
 <body >
    <div data-role="page" data-theme="a" class="type-home">
@@ -9,7 +17,7 @@
 
       <div class="ui-grid-b">
          <div class="ui-block-a" id="leftSecond">
-            <div class="chanson">
+            <!-- <div class="chanson">
                <h1 id="title">LeTitreDeLaChanson</h1>
             </div>
             <div class="artiste">
@@ -27,26 +35,68 @@
             <p id="description"></p>
             <div class="cover">
                <img src="LUrldelImage" id="image" />
-            </div>
+            </div> -->
+
+            <div id="players-score"></div>
+        </div>
       </div>
+
+
 
       </div>
    </div>
-   
-   <script>  
-	var vars = {};
-	window.location.href.replace( location.hash, '' ).replace( 
-		/[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
-		function( m, key, value ) { // callback
-			vars[key] = value !== undefined ? value : '';
-		}
-	);
-    document.getElementById("title").innerHTML=decodeURIComponent(vars.title);
-    document.getElementById("artist").innerHTML=decodeURIComponent(vars.artist);
-    document.getElementById("album").innerHTML=decodeURIComponent(vars.album);
-    document.getElementById("sortie").innerHTML=decodeURIComponent(vars.date);
-    document.getElementById("genre").innerHTML=decodeURIComponent(vars.genre);
-    document.getElementById("description").innerHTML=decodeURIComponent(vars.description);
-    document.getElementById("image").setAttribute("src",decodeURIComponent(vars.image));
-   </script>  
+
+   <script>
+	// var vars = {};
+	// window.location.href.replace( location.hash, '' ).replace(
+	// 	/[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
+	// 	function( m, key, value ) { // callback
+	// 		vars[key] = value !== undefined ? value : '';
+	// 	}
+	// );
+    // document.getElementById("title").innerHTML=decodeURIComponent(vars.title);
+    // document.getElementById("artist").innerHTML=decodeURIComponent(vars.artist);
+    // document.getElementById("album").innerHTML=decodeURIComponent(vars.album);
+    // document.getElementById("sortie").innerHTML=decodeURIComponent(vars.date);
+    // document.getElementById("genre").innerHTML=decodeURIComponent(vars.genre);
+    // document.getElementById("description").innerHTML=decodeURIComponent(vars.description);
+    // document.getElementById("image").setAttribute("src",decodeURIComponent(vars.image));
+
+    var socket = io();
+
+    socket.on("connect", function () {
+
+        socket.on("displayScore", function (data) {
+            renderPlayersScores(data);
+        });
+
+        socket.on("displayResponse", function (data) {
+            renderMusicDescription(data);
+        });
+    });
+
+    function renderPlayersScores (data) {
+
+        console.log("render scores", data);
+
+        var players = "<h1 id='title'>Scores</h1>";
+
+        players += data.reduce(function (res, player) {
+            return res + "<li class='ui-li-player'>" + player.pseudo + "<span class='ui-li-count'>" + player.score + "</span></li>";
+        }, "");
+        document.getElementById("players-score").innerHTML = players;
+    }
+
+    function renderMusicDescription (data) {
+
+        return "<h1>" + data.title + "</h1>" +
+            "<h3>" + data.artist + "</h3>" +
+            "<p><strong>Album : </strong>" + data.album + "</p>" +
+            "<p><strong>Date de sortie : </strong>" + data.date + "</p>" +
+            "<p><strong>Genre : </strong>" + data.genre + "</p>" +
+            "<p>" + data.description + "</p>" +
+            "<img src=" + data.image + " />";
+    }
+
+   </script>
 </body>

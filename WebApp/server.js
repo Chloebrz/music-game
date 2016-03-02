@@ -67,9 +67,19 @@ io.sockets.on("connect", function (socket, pseudo, music_style) {
 
         socket.emit("update", players);
     });
-    
-    socket.on("displayScore", function(){
-      socket.broadcast.emit("displayScore", players);
+
+    socket.on("displayResponse", function (data) {
+        socket.broadcast.emit("displayResponse", data);
+    });
+
+    socket.on("displayScore", function () {
+        socket.broadcast.emit("displayScore", players);
+    });
+
+    socket.on("displayResponse", function (data) {
+
+        console.log("display response");
+        socket.broadcast.emit("displayResponse", data);
     });
 
     socket.on("disconnect", function() {
