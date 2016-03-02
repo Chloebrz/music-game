@@ -13,34 +13,20 @@
 </head>
 <body >
    <div data-role="page" data-theme="a" class="type-home">
-      <div data-role="main" >
-
-      <div class="ui-grid-b">
-         <div class="ui-block-a" id="leftSecond">
-            <!-- <div class="chanson">
-               <h1 id="title">LeTitreDeLaChanson</h1>
-            </div>
-            <div class="artiste">
-               <h3 id="artist">LeNomDeLArtiste</h3>
-            </div>
-            <div class="album">
-               <p><strong>Album : </strong><span id="album">LeNomDeLAlbum</span></p>
-            <div>
-            <div class="dateSortie">
-               <p><strong>Date de sortie : </strong><span id="sortie">LaDateDeSortie</span></p>
-            </div>
-            <div class="genre">
-               <p><strong>Genre : </strong><span id="genre">LeGenreDeLaChanson</span></p>
-            </div>
-            <p id="description"></p>
-            <div class="cover">
-               <img src="LUrldelImage" id="image" />
-            </div> -->
-
-            <div id="players-score"></div>
-        </div>
+      <div data-role="header"  data-position="fixed">
+        <h1>Music Puzzle Score</h1>
       </div>
 
+      <div data-role="main" >
+        <div class="ui-grid-b">
+          <div class="ui-block-b" id="mainColumn">
+          </div>
+          <div class="ui-block-b" id="mainColumn">
+
+            <ul data-role="listview" id="players-score">
+            </ul>
+          </div>
+        </div>
 
 
       </div>
@@ -79,9 +65,9 @@
 
         console.log("render scores", data);
 
-        var players = "<h1 id='title'>Scores</h1>";
+       
 
-        players += data.reduce(function (res, player) {
+        var players = data.reduce(function (res, player) {
             return res + "<li class='ui-li-player'>" + player.pseudo + "<span class='ui-li-count'>" + player.score + "</span></li>";
         }, "");
         document.getElementById("players-score").innerHTML = players;
