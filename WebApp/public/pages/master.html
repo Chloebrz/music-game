@@ -36,7 +36,23 @@
                     <input id="volume" type="range" name="slider-1" id="slider-1" value="60" min="0" max="100" data-mini = "true" data-highlight="true">
                 </div>
       		</div>
-			<div id="content" class="textZone"></div>
+			<div id="content" class="textZone">
+				<h2 style="text-align:center;-ms-transform: rotate(90deg);webkit-transform: rotate(90deg);transform: rotate(90deg);font-weight:900;"><--</h2>
+				<p style="clear:both;">
+					Vos <strong>commandes du lecteur audio</strong>. Il vous permet de démarrer la musique, la mettre sur pause ou passer à la suivante. Vous pouvez également modifier le volume grâce au curseur dédié.
+				</p>
+				<h2 style="text-align:right;display:inline-block;width:9%;clear:right;">--></h2>
+				<p style="display:inline-block;width:90%;float:left;clear:left;">
+					Voici le <strong>tableau des scores et des joueurs</strong> qui sera mis à jour automatiquement à chaque nouveaux évènements (nouveau joueur, points gagnés...).
+					Juste en dessous se trouve la <strong>liste des recommandations</strong> qui sont faites en fonctions des préférences des joueurs (choix du style de musique).
+				</p>
+				<h2 style="display:inline-block;width:9%;clear:left;float:left;"><--</h2>
+				<p style="display:inline-block;width:90%;">
+					Votre <strong>playlist de musiques</strong>. Vous pouvez choisir l'ordre de vos musiques en les déplaçants. (glisser/deposer). En cliquant sur une musique, elle va automatiquement se placer en deuxième position (elle va être lue juste après la musique actuelle).
+				</p>
+				<br>
+				<h2 style="text-align:center;">Bon jeu ! et merci de jouer à Music Puzzle</h2>
+			</div>
       	</div>
       	<div class="ui-block-c" id="rightSecond">
 			<h3>Joueurs<h3>
@@ -118,7 +134,7 @@
 	function playMusic() {
 
       socket.emit("displayScore");
-      
+
 		var url = $("ul#sortable li:first").attr("url");
 		$.get("http://localhost:8000/audio/playMusic?musicurl=" + url, function (data, status) {
 			console.log(data, status);
@@ -237,7 +253,7 @@
 			dataMusic.album + "&date=" + dataMusic.date + "&genre=" + dataMusic.genre + "&description=" + dataMusic.description +
 			"&image=" + dataMusic.image;
    }
-   
+
    function renderUriScores (players) {
       var url = "http://"+adresseIP+":8080/projecteur_scores?";
       //var compteur = 0;
@@ -246,7 +262,7 @@
       });
       return url;
    }
- 
+
 	function renderDescription () {
 
 		return "<h1>" + dataMusic.title + "</h1>" +
@@ -330,9 +346,9 @@
          players=data;
 			renderPlayersScores(data);
 		});
-      
-      
-      
+
+
+
 	});
 </script>
 
