@@ -22,12 +22,13 @@ public class VideoServer implements HttpHandler {
 
 		// -> /video -> requestBody:(html content)
 		URI uri = t.getRequestURI();
-		System.out.println(uri.toString());
+		System.out.println("URI: " + uri);
 
 		int i;
 		StringBuilder sb = new StringBuilder();
 		InputStream in = t.getRequestBody();
 		InputStreamReader reader = new InputStreamReader(in);
+		
 		while ((i = reader.read()) != -1) {
 			sb.append((char) i);
 		}

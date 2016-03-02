@@ -11,11 +11,11 @@ import com.sun.net.httpserver.HttpServer;
 public class MyControlPoint extends ControlPoint implements
 		DeviceChangeListener {
 
-	private Device projetorDevice;
+	private Device projectorDevice;
 	private Device audioDevice;
 	private Device vocalDevice;
 
-	private final static String PROJETOR_DEVICE_NAME = "LIMSI PhotoTextViewer";
+	private final static String PROJECTOR_DEVICE_NAME = "Textual Digital Picture Frame System";
 	private final static String AUDIO_DEVICE_NAME = "LIMSI AudioPlayer";
 	private final static String VOCAL_DEVICE_NAME = "LIMSI Speech";
 
@@ -58,7 +58,7 @@ public class MyControlPoint extends ControlPoint implements
 
 		if (name.equals(AUDIO_DEVICE_NAME) && audioDevice == null) audioDevice = dev;
 
-		else if (name.equals(PROJETOR_DEVICE_NAME) && projetorDevice == null) projetorDevice = dev;
+		else if (name.equals(PROJECTOR_DEVICE_NAME) && projectorDevice == null) projectorDevice = dev;
 
 		else if (name.equals(VOCAL_DEVICE_NAME) && vocalDevice == null) vocalDevice = dev;
 	}
@@ -71,7 +71,7 @@ public class MyControlPoint extends ControlPoint implements
 
 		if (name.equals(AUDIO_DEVICE_NAME)) audioDevice = null;
 
-		else if (name.equals(PROJETOR_DEVICE_NAME)) projetorDevice = null;
+		else if (name.equals(PROJECTOR_DEVICE_NAME)) projectorDevice = null;
 
 		else if (name.equals(VOCAL_DEVICE_NAME)) vocalDevice = null;
 	}
@@ -156,26 +156,7 @@ public class MyControlPoint extends ControlPoint implements
 		action.setArgumentValue("Argument", volume);
 		setPostControl(action);
 	}
-
-	public void playProjetor(String url) {
-
-		System.out.println("projetor device " + (projetorDevice == null));
-
-		if (projetorDevice == null) {
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			playProjetor(url);
-		}
-
-		Action photoAction = projetorDevice.getAction("SetPicture");
-		photoAction.setArgumentValue("Picture", url);
-
-		setPostControl(photoAction);
-	}
-
+	
 	public void announcePlayer(String playerName) {
 
 		if (vocalDevice == null) {
@@ -195,9 +176,7 @@ public class MyControlPoint extends ControlPoint implements
 
 	public void displayHtml(String url) {
 
-		System.out.println("projetor device " + (projetorDevice == null));
-
-		if (projetorDevice == null) {
+		if (projectorDevice == null) {
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
@@ -205,10 +184,11 @@ public class MyControlPoint extends ControlPoint implements
 			}
 			displayHtml(url);
 		}
-
-		Action photoAction = projetorDevice.getAction("SetText");
+		
+		Action photoAction = projectorDevice.getAction("SetText");
 		photoAction.setArgumentValue("Text", url);
 
 		setPostControl(photoAction);
 	}
 }
+

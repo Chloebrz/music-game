@@ -28,7 +28,6 @@ public class AudioServer implements HttpHandler {
 		System.out.println("URI: " + uri);
 
 		List<NameValuePair> params = URLEncodedUtils.parse(uri, "UTF-8");
-		// cover params to map
 		Map<String, String> paramap = new HashMap<String, String>();
 		for (NameValuePair pair : params) {
 			paramap.put(pair.getName(), pair.getValue());

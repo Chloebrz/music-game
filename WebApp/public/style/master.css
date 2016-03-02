@@ -18,6 +18,7 @@
 .textZone{
     padding: 10px 25px;
     text-align: justify;
+    background-color:rgba(0, 0, 0, 0.05);
 }
 
 img {
@@ -69,6 +70,43 @@ img {
 
 .ui-dialog-buttonpane {
     margin: 0 !important;
+}
+
+.dialog-button{
+    width:35%;
+    height:40px;
+    background:#ECECEC;
+    color:black;
+    cursor:pointer;
+    border:none;
+    border-radius:3px;
+    box-shadow:0px 0px 2px #555;
+    font-weight:900;
+    font-size:15pt;
+}
+.dialog-button:hover{
+    background:#6C7A89;
+    color:white;
+}
+
+#dialog-confirm{
+    position:absolute;
+    border:3px solid rgb(51, 136, 204);
+    top:-300px;
+    left:40%;
+    width:350px;
+    border-radius:5px;
+    height:150px!important;
+    background:#f9f9f9;
+    box-shadow:0px 0px 100px black;
+    display:block;
+    opacity:0;
+    transition:opacity 0.3s ease;
+}
+
+#dialog-confirm.popup{
+    top:45%;
+    opacity:1;
 }
 
 #volume {

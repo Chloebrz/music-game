@@ -16,7 +16,7 @@ app.get("/", function (req, res) {
 });
 
 app.get("/master", function (req, res) {
-    res.sendFile(path.join(__dirname + "/public/pages/master_pc.html"));
+    res.sendFile(path.join(__dirname + "/public/pages/master.html"));
 });
 
 app.get("/player", function (req, res) {

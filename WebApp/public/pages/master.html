@@ -3,86 +3,201 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
-	<link rel="stylesheet" type="text/css" href="style/master.css">
-	<!-- <link href="style/bootstrap/css/bootstrap.min.css" rel="stylesheet" /> -->
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	<link rel="stylesheet" type="text/css" href="../style/master.css">
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 </head>
 <body >
-<div data-role="page"data-theme="a" class="type-home">
-
-		<div data-role="panel" id="mypanelLeft" data-position="left" data-display="overlay" data-position-fixed="true">
-			<a class="ui-btn" href="#" data-rel="close">close</a>
-			<h3>PlayList<h3>
-			<ul data-role="listview">
-				<li><a href="#">
-				<img src="images/master/pop.png">
-				<h2>Pop music name</h2>
-				<p>I love this music...</p></a></li>
-
-				<li><a href="#">
-				<img src="images/master/jazz.jpg">
-				<h2>Jazz1 name</h2>
-				<p>I love this music...</p></a></li>
-
-				<li><a href="#">
-				<img src="images/master/blues.jpg">
-				<h2>who I am</h2>
-				<p>Beatles</p></a></li>
-			</ul>
-		</div><!-- /panel -->
-
-		<div data-role="panel" id="mypanelRight" data-position="right" data-display="overlay" data-position-fixed="true">
-			<a class="ui-btn" href="#" data-rel="close">close</a>
-			<h3>Players:<h3>
-			<ul id="players-score" data-role="listview"></ul>
-			<!-- <h3>Music voted:<h3>
-			<ul data-role="listview">
-				<li><a data-icon="plus">Pop</a></li>
-				<li><a data-icon="plus">Jazz</a></li>
-				<li><a data-icon="plus">Blues</a></li>
-			</ul> -->
-		</div><!-- /panel -->
-
+<div data-role="page" data-theme="a" class="type-home">
 
 	  <div data-role="header"  data-position="fixed">
-	  	<a href="#mypanelLeft" data-icon="bars">PlayList</a>
 		<h1>Music Puzzle</h1>
-		<a href="#mypanelRight" data-icon="bars">UserList</a>
 	  </div>
 
-	<div data-role="main" class="ui-content" >
-		<div class="bgimg">
-			<div class="textZone">
-				<h1>Dangerous<h1>
-				<p>Here is a description...blablabla....</p>
-			</div>
-		</div>
+	<div data-role="main" >
 
+	<div class="ui-grid-b">
+		<div class="ui-block-a" id="leftSecond">
+	      	<h3>PlayList<h3>
+			<ul data-role="listview" id="sortable"></ul>
+      	</div>
+      	<div class="ui-block-b" id="mainColumn">
+      		<div class="control" data-role="controlgroup" data-type="horizontal">
+				<a id="playBtn" class="ui-btn ui-btn-icon-left ui-icon-play">play</a>
+				<a id="pauseBtn" class="ui-btn ui-btn-icon-left ui-icon-pause">pause</a>
+				<a id="nextBtn" class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-next">next</a><br>
+
+				<input id="volume" type="range" name="slider-1" id="slider-1" value="60" min="0" max="100" data-mini = "true" data-highlight="true">
+      		</div>
+			<div id="content" class="textZone"></div>
+      	</div>
+      	<div class="ui-block-c" id="rightSecond">
+			<h3>Joueurs<h3>
+			<ul id="players-score" class="ui-listview"></ul>
+
+			<h3>Titres recommandés<h3>
+			<ul data-role="listview" id="recommandation">
+			</ul>
+      	</div>
 	</div>
-	<div data-role="footer" class="ui-bar" data-position="fixed">
-	<button class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-play">play</button>
-	<button class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-next">next</button>
-	<button class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-volume">volume</button>
 
-	<button id="lampe" class="btn btn-danger">Allumer la lampe</button>
 	</div>
 </div>
 
-<dialog id="dialog">
-	<h3><span id="name">XX</span> a buzzé !</h3>
-	<p>Est-ce la bonne réponse ?</p>
-	<button id="yes" class="btn btn-primary" value="oui">Oui</button>
-	<button id="no" class="btn btn-default" value="non">Non</button>
-</dialog>
+<div id="dialog-confirm">
+	<h2 style="box-shadow:0px 1px 1px #555; background:#EEE;top:0;margin-top:0;text-align:center;margin-bottom:0;border-radius:5px 5px 0px 0px;"><span id="name">XX</span> a buzzé !</h2>
+	<div id="dialog-main" style="margin-left:10px;">
+		<p style="font-size:15pt;margin-bottom:20px;">Est-ce la bonne réponse ?</p>
+		<button class="dialog-button" id="yes" style="margin-left:14%;margin-right:1%;">Oui</button>
+		<button class="dialog-button" id="no">Non</button>
+	</div>
+</div>
 
-<script src="/socket.io/socket.io.js"></script>
-<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
 	var socket = io();
+	var dataMusic = {};
 
-	$("#lampe").click(function () {
-		$.get("http://localhost:8000/test", function (data, status) {
+	$(function() {
+
+		$("#sortable").sortable();
+
+		var query_all = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>" +
+			"PREFIX blindtest:   <http://localhost:3030/blindtest/data#> " +
+			"PREFIX rdfs:       <http://www.w3.org/2000/01/rdf-schema#>" +
+			"PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>" +
+			"PREFIX dbp:        <http://dbpedia.org/property/>" +
+			"PREFIX prop-fr:        <http://fr.dbpedia.org/property/>" +
+			"PREFIX foaf: <http://xmlns.com/foaf/0.1/>" +
+			"SELECT * WHERE { " +
+			"SERVICE <http://localhost:3030/blindtest/sparql> {" +
+			"?subject blindtest:hasArtist ?artist_blindtest. " +
+			"?subject blindtest:hasName ?title." +
+			"?subject blindtest:hasImage ?image." +
+			"?subject blindtest:hasFile ?file .}}" ;
+
+		$.post("http://localhost:3030/blindtest/query", {query: query_all}, function (data, status) {
+			renderPlayList(data);
+		});
+	});
+
+	function renderRecommandations (categories)  {
+
+		var query_recommandation = "PREFIX blindtest:   <http://localhost:3030/blindtest/data#> " +
+		                         "SELECT * WHERE { " +
+		                         "SERVICE <http://localhost:3030/blindtest/sparql> {";
+		var compteur = 0;
+		categories.forEach(function(category) {
+
+		 if (compteur!=0) query_recommandation += "UNION " ;
+		 compteur ++;
+
+		 query_recommandation += "{" +
+		   "?subject blindtest:hasCategory ?category ." +
+		   "?subject blindtest:hasArtist ?artist_blindtest." +
+		   "?subject blindtest:hasName ?title." +
+		   "?subject blindtest:hasImage ?image." +
+		   "?subject blindtest:hasFile ?file ." +
+		   "FILTER regex(?category,'" + category + "')}";
+		});
+
+	  	query_recommandation += "}}"  ;
+
+		$.post("http://localhost:3030/blindtest/query", {query: query_recommandation}, function (data, status) {
+			renderRecommandation(data);
+		});
+	}
+
+	function playMusic() {
+
+		var url = $("ul#sortable li:first").attr("url");
+		$.get("http://localhost:8000/audio/playMusic?musicurl=" + url, function (data, status) {
+			console.log(data, status);
+		});
+
+		console.log("PLAY MUSIC");
+
+		var title = $("ul#sortable li:first > a > h2").text();
+		var artist = $("ul#sortable li:first > a > p").text();
+		var image = $("ul#sortable li:first > a > img").attr("src");
+
+		var query = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>" +
+			"PREFIX blindtest:   <http://localhost:3030/blindtest/data#> " +
+			"PREFIX rdfs:       <http://www.w3.org/2000/01/rdf-schema#>" +
+			"PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>" +
+			"PREFIX dbp:        <http://dbpedia.org/property/>" +
+			"PREFIX prop-fr:        <http://fr.dbpedia.org/property/>" +
+			"PREFIX foaf: <http://xmlns.com/foaf/0.1/>" +
+			"SELECT * WHERE { " +
+				"SERVICE <http://dbpedia.org/sparql> {" +
+				"?sub  dbpedia-owl:abstract   ?description ." +
+				"?sub     dbpedia-owl:genre    ?genre ." +
+				"?sub  rdfs:comment              ?comment ." +
+				"?sub dbp:title               ?test ." +
+				"?sub     dbp:artist              ?artist ." +
+				"?artist rdfs:label              ?artist_label." +
+				"?artist dbpedia-owl:abstract  ?artiste_abstract ." +
+				"OPTIONAL {?sub   dbpedia-owl:genre       ?genre }." +
+				"OPTIONAL {?sub   dbpedia-owl:album       ?album } ." +
+				"OPTIONAL { ?sub  dbp:released            ?date }." +
+				"OPTIONAL {?sub   dbp:thisAlbum           ?album} " +
+
+				"{FILTER LANGMATCHES(LANG(?description), 'fr' )" +
+				"   FILTER LANGMATCHES(LANG(?comment), 'fr')" +
+				"   FILTER LANGMATCHES(LANG(?artiste_abstract), 'fr' )}" +
+				"UNION" +
+				"{FILTER LANGMATCHES(LANG(?description), 'en' )"+
+				"FILTER LANGMATCHES(LANG(?comment), 'en' )"+
+				" FILTER LANGMATCHES(LANG(?artiste_abstract), 'en' )}"+
+
+				" FILTER regex(?test,'" + title + "')"+
+				"FILTER regex(?artist_label,'" + artist + "')}}";
+
+		console.log("query done");
+
+		$.post("http://localhost:3030/blindtest/query", {query: query}, function (data, status) {
+
+			var desc = data.results.bindings[0];
+
+			dataMusic = {
+				title : title,
+				artist : desc.artist_label.value,
+				album : filtreString(desc.album.value),
+				date : desc.date.value,
+				genre : filtreString(desc.genre.value),
+				description : desc.description.value,
+				image : image
+			};
+
+			var description = renderDescription();
+			$("#content").html(description);
+		});
+	}
+
+	$("#playBtn").click(function () {
+		playMusic();
+	});
+
+	$("#pauseBtn").click(function () {
+		$.get("http://localhost:8000/audio/pauseMusic", function (data, status) {
+			console.log(data, status);
+		});
+	});
+
+	$("#nextBtn").click(function () {
+
+		$("#sortable li:last").after($("#sortable li:eq(0)"));
+		playMusic();
+	});
+
+	$("#volumeBtn").click(function () {
+
+		var value = 80;
+		$.get("http://localhost:8000/audio/setVolume?value=" + value, function (data, status) {
 			console.log(data, status);
 		});
 	});
@@ -90,9 +205,45 @@
 	function renderPlayersScores (data) {
 
 		var players = data.reduce(function (res, player) {
-			return res + "<li><a>" + player.pseudo + "<span class='ui-li-count'>" + player.score + "</span></a></li>";
+			return res + "<li class='ui-li-player'>" + player.pseudo + "<span class='ui-li-count'>" + player.score + "</span></li>";
 		}, "");
 		$("#players-score").html(players);
+	}
+
+	function renderPlayList (data) {
+
+		var musics = data.results.bindings.reduce(function (res, music) {
+			return res + "<li url=" + music.file.value + "><a href='#'><img src='" + music.image.value + "'><h2>" + music.title.value + "</h2><p>" + music.artist_blindtest.value + "</p></a></li>";
+		}, "");
+		$("#sortable").html(musics).listview("refresh");
+	}
+
+   function renderRecommandation (data) {
+
+      var musics = data.results.bindings.reduce(function (res, music) {
+			return res + "<li url=" + music.file.value + "><a href='#'><img src='" + music.image.value + "'><h2>" + music.title.value + "</h2><p>" + music.artist_blindtest.value + "</p></a></li>";
+		}, "");
+      $("#recommandation").html(musics).listview("refresh");
+	}
+
+	function filtreString (string) {
+
+		var position = string.indexOf("resource") + 9;
+		var resultat = string;
+
+		if (position > 8) resultat = string.substring(position);
+		return resultat.replace('_', ' ');
+	}
+
+	function renderDescription () {
+
+		return "<h1>" + dataMusic.title + "</h1>" +
+			"<h3>" + dataMusic.artist + "</h3>" +
+			"<p><strong>Album : </strong>" + dataMusic.album + "</p>" +
+			"<p><strong>Date de sortie : </strong>" + dataMusic.date + "</p>" +
+			"<p><strong>Genre : </strong>" + dataMusic.genre + "</p>" +
+			"<p>" + dataMusic.description + "</p>" +
+			"<img src=" + dataMusic.image + " />";
 	}
 
 	socket.on("connect", function () {
@@ -101,23 +252,40 @@
 
 		socket.on("init", function (data) {
 
-			console.log("INIT", data);
 			renderPlayersScores(data);
+         	var categories = data.map(function (player) {
+				return player.music_style;
+			});
+         	renderRecommandations(categories);
 		});
 
 		socket.on("buzz", function (data) {
 
 			$("#name").html(data);
 
-			var dialog = document.getElementById("dialog");
-			dialog.showModal();
+			var playerName = data;
+			$.get("http://localhost:8000/vocal/anouncePlayer?playerName=" + playerName, function (data, status) {
+				console.log(data, status);
+			});
 
-			document.getElementById("no").onclick = function() {
-				dialog.close();
-			};
-			document.getElementById("yes").onclick = function() {
-				dialog.close();
-			};
+			$("#dialog-confirm").attr("class", "popup");
+
+			$("#yes").click(function () {
+
+				$("#dialog-confirm").attr("class", "");
+				socket.emit("score", data);
+
+				$.post("http://localhost:8000/video", renderDescription(), function (data, status) {
+					console.log(data, status);
+				});
+			});
+			$("#no").click(function () {
+				$("#dialog-confirm").attr("class", "");
+			});
+		});
+
+		socket.on("update", function (data) {
+			renderPlayersScores(data);
 		});
 	});
 </script>
