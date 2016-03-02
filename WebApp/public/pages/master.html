@@ -261,6 +261,9 @@
 
 		socket.on("buzz", function (data) {
 
+			// si un popup est deja ouvert, ignorer
+			if ($("#dialog-confirm").attr("class") == "popup") return;
+
 			$("#name").html(data);
 
 			var playerName = data;
@@ -273,7 +276,7 @@
 			$("#yes").unbind().click(function () {
 
 				$("#dialog-confirm").attr("class", "");
-				socket.emit("score", data);
+				socket.emit("score", playerName);
 
 				$.post("http://localhost:8000/video", renderDescription(), function (data, status) {
 					console.log(data, status);
