@@ -27,7 +27,9 @@
             var socket = io();
             var pseudo;
             var music_style;
-            function buzz() {
+            var adresseIP = "10.77.5.66";
+
+            function buzz () {
                 socket.emit("buzz");
             }
 
@@ -39,7 +41,7 @@
                                     "?subject blindtest:hasCategory ?category" +
                                   "}}";
 
-          		$.post("http://localhost:3030/blindtest/query", {query: query_all}, function (data, status) {
+          		$.post("http://" + adresseIP + ":3030/blindtest/query", {query: query_all}, function (data, status) {
                 var categories = data.results.bindings.reduce(function (res, object) {
             			return res + "<option val='"+ object.category.value +"'>" + object.category.value+"</option>";
             		}, "");

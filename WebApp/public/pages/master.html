@@ -130,18 +130,23 @@
 		});
 	}
 
-	function playMusic() {
+	function playMusic () {
 
-      socket.emit("displayScore");
+      	socket.emit("displayScore");
 
-		var url = $("ul#sortable li:first").attr("url");
+		loadInfo(0);
+
+		var url = $("ul#sortable li:first").attr("id");
 		$.get("http://localhost:8000/audio/playMusic?musicurl=" + url, function (data, status) {
 			console.log(data, status);
 		});
+	}
 
-		var title = $("ul#sortable li:first > a > h2").text();
-		var artist = $("ul#sortable li:first > a > p").text();
-		var image = $("ul#sortable li:first > a > img").attr("src");
+	function loadInfo (index) {
+
+		var title = $("ul#sortable li:eq(" + index + ") > a > h2").text();
+		var artist = $("ul#sortable li:eq(" + index + ") > a > p").text();
+		var image = $("ul#sortable li:eq(" + index + ") > a > img").attr("src");
 
 		var query = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>" +
 			"PREFIX blindtest:   <http://localhost:3030/blindtest/data#> " +
@@ -317,6 +322,8 @@
 				$("#dialog-confirm").attr("class", "");
 				socket.emit("score", playerName);
 				socket.emit("displayResponse", dataMusic);
+
+				loadInfo(1);
 			});
 			$("#no").unbind().click(function () {
 				$.get("http://localhost:8000/vocal/wrongAnswer?playerName=" + playerName, function (data, status) {
