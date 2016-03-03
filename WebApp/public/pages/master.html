@@ -292,6 +292,9 @@
          	var categories = data.map(function (player) {
 				return player.music_style;
 			});
+			categories = categories.filter(function (value, index, self) {
+			    return self.indexOf(value) === index;
+			});
          	renderRecommandations(categories);
 
 			$.post("http://localhost:8000/video", "http://" + adresseIP + ":8080/projecteur", function (data, status) {

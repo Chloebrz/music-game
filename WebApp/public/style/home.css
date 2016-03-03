@@ -2,3 +2,11 @@ body {
     padding-top: 70px;
     padding-bottom: 30px;
 }
+
+p {
+    font-size: 1.2em;
+}
+
+ul {
+    font-size: 1.2em;
+}
